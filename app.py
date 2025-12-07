@@ -7,9 +7,6 @@ from gtts import gTTS
 import nest_asyncio
 import random
 import os
-import textwrap
-import io
-import time
 
 # Fix for asyncio loops
 nest_asyncio.apply()
@@ -22,65 +19,172 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# --- ADVANCED CSS STYLING ---
-st.markdown("""
+# --- THEME CONFIGURATION ---
+# Define color palettes for different themes
+themes = {
+    "Ocean 🌊": {
+        "bg_gradient": "linear-gradient(90deg, #264653 0%, #2a9d8f 100%)",
+        "sidebar_bg": "#f8f9fa",
+        "sidebar_text": "#264653",
+        "card_bg": "#ffffff",
+        "card_border": "#e0e0e0",
+        "text_primary": "#264653",
+        "text_secondary": "#e76f51",
+        "accent": "#2a9d8f",
+        "badge": "#e9c46a"
+    },
+    "Midnight 🌑": {
+        "bg_gradient": "linear-gradient(90deg, #0f2027 0%, #203a43 50%, #2c5364 100%)",
+        "sidebar_bg": "#1e1e1e",
+        "sidebar_text": "#ffffff",
+        "card_bg": "#2d2d2d",
+        "card_border": "#404040",
+        "text_primary": "#e0e0e0",
+        "text_secondary": "#4db6ac",
+        "accent": "#80cbc4",
+        "badge": "#ffca28"
+    },
+    "Autumn 🍂": {
+        "bg_gradient": "linear-gradient(90deg, #d35400 0%, #e67e22 100%)",
+        "sidebar_bg": "#fdf2e9",
+        "sidebar_text": "#6e2c00",
+        "card_bg": "#ffffff",
+        "card_border": "#edbb99",
+        "text_primary": "#873600",
+        "text_secondary": "#d35400",
+        "accent": "#e67e22",
+        "badge": "#f5b041"
+    }
+}
+
+# Initialize Session State for Theme
+if 'current_theme' not in st.session_state:
+    st.session_state.current_theme = "Ocean 🌊"
+
+# --- SIDEBAR & THEME SELECTOR ---
+st.sidebar.markdown("### 🎨 Appearance")
+selected_theme_name = st.sidebar.selectbox("Choose Theme:", list(themes.keys()), index=0)
+st.session_state.current_theme = selected_theme_name
+current_colors = themes[st.session_state.current_theme]
+
+# --- DYNAMIC CSS STYLING ---
+st.markdown(f"""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
     
-    html, body, [class*="css"] { font-family: 'Poppins', sans-serif; }
+    html, body, [class*="css"] {{
+        font-family: 'Poppins', sans-serif;
+    }}
     
-    .main-header {
-        background: linear-gradient(90deg, #264653 0%, #2a9d8f 100%);
-        padding: 2rem; border-radius: 15px; color: white; margin-bottom: 2rem;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center;
-    }
+    /* Main Header Gradient */
+    .main-header {{
+        background: {current_colors['bg_gradient']};
+        padding: 2rem;
+        border-radius: 15px;
+        color: white;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        text-align: center;
+    }}
     
-    /* Small Card Design for Top 200 (Compact) */
-    .small-book-card {
-        background: white;
-        border-radius: 10px;
-        padding: 10px;
+    /* Sidebar Styling - Dynamic */
+    section[data-testid="stSidebar"] {{
+        background-color: {current_colors['sidebar_bg']};
+    }}
+    
+    section[data-testid="stSidebar"] .stMarkdown, 
+    section[data-testid="stSidebar"] h1, 
+    section[data-testid="stSidebar"] h2, 
+    section[data-testid="stSidebar"] h3, 
+    section[data-testid="stSidebar"] p,
+    section[data-testid="stSidebar"] span {{
+        color: {current_colors['sidebar_text']} !important;
+    }}
+    
+    /* Card Design */
+    .small-book-card, .book-card {{
+        background: {current_colors['card_bg']};
+        border-radius: 12px;
+        padding: 12px;
         height: 100%;
-        min-height: 200px;
-        border: 1px solid #eee;
-        transition: all 0.2s ease;
-        position: relative;
+        min-height: 220px;
+        border: 1px solid {current_colors['card_border']};
+        transition: transform 0.2s, box-shadow 0.2s;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-    }
-    .small-book-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        border-color: #2a9d8f;
-    }
-    .small-title {
-        font-size: 0.85rem; font-weight: 600; color: #264653; margin-top: 15px; line-height: 1.3;
-    }
-    .small-author {
-        font-size: 0.75rem; color: #e76f51; margin-bottom: 5px;
-    }
-    .small-badge {
-        position: absolute; top: 5px; right: 5px; background: #e9c46a;
-        color: #264653; padding: 2px 6px; border-radius: 10px; font-size: 0.6rem; font-weight: bold;
-    }
-
-    /* Standard Card for Search Results */
-    .book-card {
-        background: white; border-radius: 15px; padding: 15px;
-        height: 100%; min-height: 380px; border: 1px solid #e0e0e0;
-        position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;
-    }
-    .book-cover-img { width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-bottom: 10px; }
+        color: {current_colors['text_primary']};
+    }}
     
-    .chat-bubble {
-        background-color: #f1f8f6; border-radius: 15px; border-bottom-left-radius: 0;
-        padding: 15px; margin: 10px 0; border-left: 5px solid #2a9d8f;
-    }
+    .small-book-card:hover, .book-card:hover {{
+        transform: translateY(-4px);
+        box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+        border-color: {current_colors['accent']};
+    }}
     
-    .stButton>button { border-radius: 8px; font-weight: 600; transition: 0.2s; }
-    .stButton>button:hover { transform: scale(1.02); }
-    section[data-testid="stSidebar"] { background-color: #f8f9fa; }
+    .small-title, .book-title {{
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: {current_colors['text_primary']};
+        margin-top: 15px;
+        line-height: 1.3;
+    }}
+    
+    .small-author, .book-author {{
+        font-size: 0.8rem;
+        color: {current_colors['text_secondary']};
+        margin-bottom: 8px;
+    }}
+    
+    .small-badge {{
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        background: {current_colors['badge']};
+        color: #333;
+        padding: 3px 8px;
+        border-radius: 10px;
+        font-size: 0.65rem;
+        font-weight: bold;
+    }}
+    
+    /* Search Result Images */
+    .book-cover-img {{
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 10px;
+    }}
+    
+    /* Chat Bubbles */
+    .chat-bubble {{
+        background-color: {current_colors['card_bg']};
+        border-radius: 15px;
+        border-bottom-left-radius: 0;
+        padding: 15px;
+        margin: 10px 0;
+        border-left: 5px solid {current_colors['accent']};
+        color: {current_colors['text_primary']};
+        border: 1px solid {current_colors['card_border']};
+    }}
+    
+    /* Buttons */
+    .stButton>button {{
+        border-radius: 8px;
+        font-weight: 600;
+        border: 1px solid {current_colors['accent']};
+    }}
+    .stButton>button:hover {{
+        border-color: {current_colors['text_secondary']};
+        color: {current_colors['text_secondary']};
+    }}
+    
+    /* Override Streamlit Dark Mode Default Texts */
+    p, h1, h2, h3, h4, h5, li {{
+        color: {current_colors['text_primary']};
+    }}
+    
 </style>
 """, unsafe_allow_html=True)
 
@@ -103,7 +207,6 @@ def get_top_200_books():
         ("They're a Weird Mob", "Nino Culotta", "Humor"), ("Poor Man's Orange", "Ruth Park", "Classic"),
         ("Seven Little Australians", "Ethel Turner", "Kids Classic"), ("The Magic Pudding", "Norman Lindsay", "Kids Classic"),
         ("Snugglepot and Cuddlepie", "May Gibbs", "Kids Classic"), ("Blinky Bill", "Dorothy Wall", "Kids Classic"),
-        
         # --- Contemporary Australian Fiction ---
         ("Boy Swallows Universe", "Trent Dalton", "Fiction"), ("Lola in the Mirror", "Trent Dalton", "Fiction"),
         ("All Our Shimmering Skies", "Trent Dalton", "Fiction"), ("Big Little Lies", "Liane Moriarty", "Thriller"),
@@ -126,7 +229,6 @@ def get_top_200_books():
         ("The Yield", "Tara June Winch", "Fiction"), ("Bila Yarrudhanggalangdhuray", "Anita Heiss", "Historical"),
         ("Bruny", "Heather Rose", "Thriller"), ("Love & Virtue", "Diana Reid", "Fiction"),
         ("Seeing Other People", "Diana Reid", "Fiction"), ("Everyone In My Family Has Killed Someone", "Benjamin Stevenson", "Mystery"),
-        
         # --- Non-Fiction / Biography / History ---
         ("The Barefoot Investor", "Scott Pape", "Finance"), ("RecipeTin Eats: Dinner", "Nagi Maehashi", "Cooking"),
         ("RecipeTin Eats: Tonight", "Nagi Maehashi", "Cooking"), ("Dark Emu", "Bruce Pascoe", "History"),
@@ -138,7 +240,6 @@ def get_top_200_books():
         ("My Place", "Sally Morgan", "Biography"), ("Follow the Rabbit-Proof Fence", "Doris Pilkington", "Biography"),
         ("No Friend But the Mountains", "Behrouz Boochani", "Memoir"), ("Phosphorescence", "Julia Baird", "Self-Help"),
         ("The Trauma Cleaner", "Sarah Krasnostein", "Biography"), ("Woman of Substances", "Jenny Valentish", "Memoir"),
-        
         # --- Kids & YA ---
         ("Possum Magic", "Mem Fox", "Kids"), ("Where is the Green Sheep?", "Mem Fox", "Kids"),
         ("Ten Little Fingers and Ten Little Toes", "Mem Fox", "Kids"), ("Wombat Stew", "Marcia K. Vaughan", "Kids"),
@@ -153,7 +254,6 @@ def get_top_200_books():
         ("On the Jellicoe Road", "Melina Marchetta", "YA"), ("Tomorrow, When the War Began", "John Marsden", "YA"),
         ("The Dead of the Night", "John Marsden", "YA"), ("Obernewtyn", "Isobelle Carmody", "Fantasy"),
         ("Deltora Quest", "Emily Rodda", "Fantasy"), ("Rowan of Rin", "Emily Rodda", "Fantasy"),
-        
         # --- International Bestsellers Popular in Australia ---
         ("It Ends with Us", "Colleen Hoover", "Romance"), ("It Starts with Us", "Colleen Hoover", "Romance"),
         ("Verity", "Colleen Hoover", "Thriller"), ("Where the Crawdads Sing", "Delia Owens", "Fiction"),
@@ -202,9 +302,7 @@ def get_top_200_books():
         ("Girl, Woman, Other", "Bernardine Evaristo", "Fiction"), ("Americanah", "Chimamanda Ngozi Adichie", "Fiction")
     ]
     
-    # Ensure distinct items if any dups crept in
     base_list = list(set(base_list))
-    # Sort for consistent display
     base_list.sort(key=lambda x: x[0])
 
     full_data = []
@@ -240,7 +338,7 @@ if 'hall_of_fame' not in st.session_state:
 def add_to_favorites(book_item):
     if not any(b['title'] == book_item['title'] for b in st.session_state.favorites):
         st.session_state.favorites.append(book_item)
-        st.toast(f"✅ Saved!", icon="❤️") # Shortened toast
+        st.toast(f"✅ Saved!", icon="❤️")
     else:
         st.toast("⚠️ Already Saved", icon="ℹ️")
 
@@ -316,7 +414,7 @@ def get_audio(text, gender):
 
 # --- UI LAYOUT ---
 
-# Sidebar
+# Sidebar Navigation
 st.sidebar.markdown("### 🏛️ Library Menu")
 nav = st.sidebar.radio("", 
     ["🏆 Top 200 Books", "🔍 Global Search", "❤️ My Favorites", "🌟 Hall of Fame", "🗣️ Practice Chat"],
@@ -349,11 +447,9 @@ if nav == "🏆 Top 200 Books":
         else:
             display_list = [b for b in display_list if b['genre'] == filter_genre]
             
-    # CHANGED TO 6 COLUMNS (HALF SIZE CARDS)
     cols = st.columns(6) 
     for idx, book in enumerate(display_list):
         with cols[idx % 6]:
-            # Using Small Card CSS
             st.markdown(f"""
             <div class="small-book-card">
                 <span class="small-badge">{book['genre']}</span>
@@ -362,11 +458,10 @@ if nav == "🏆 Top 200 Books":
                     <p class="small-author">{book['author']}</p>
                 </div>
                 <div style="margin-top:auto;">
-                   <a href="{book['search_link']}" target="_blank" style="text-decoration:none; font-size:0.7rem; color:#2a9d8f;">🔎 Verify</a>
+                   <a href="{book['search_link']}" target="_blank" style="text-decoration:none; font-size:0.7rem; color:{current_colors['accent']};">🔎 Verify</a>
                 </div>
             </div>
             """, unsafe_allow_html=True)
-            # Compact Add Button
             if st.button("➕", key=f"top_{idx}", help="Add to Favorites", use_container_width=True):
                 add_to_favorites(book)
             st.write("") 
@@ -387,7 +482,6 @@ elif nav == "🔍 Global Search":
             st.session_state.search_results = search_google_books_api(query)
             
     if 'search_results' in st.session_state and st.session_state.search_results:
-        # Standard Grid for Search
         grid_cols = st.columns(4)
         for idx, book in enumerate(st.session_state.search_results):
             with grid_cols[idx % 4]:
@@ -396,8 +490,8 @@ elif nav == "🔍 Global Search":
                 <div class="book-card">
                     <div>
                         <img src="{cover_img}" class="book-cover-img">
-                        <h5 style="color:#264653; font-size:0.95rem; margin-bottom:5px; height:40px; overflow:hidden;">{book['title'][:50]}...</h5>
-                        <p style="color:#666; font-size:0.8rem;">{book['author'][:30]}</p>
+                        <h5 class="book-title">{book['title'][:50]}...</h5>
+                        <p class="book-author">{book['author'][:30]}</p>
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
@@ -444,11 +538,11 @@ elif nav == "🌟 Hall of Fame":
             bio = st.session_state.wiki_bio
             st.markdown(f"""
             <div class="book-card" style="display:flex; gap:20px; align-items:start; flex-direction:row;">
-                <img src="{bio['image']}" style="width:120px; height:120px; object-fit:cover; border-radius:50%; border:4px solid #e9c46a; flex-shrink:0;">
+                <img src="{bio['image']}" style="width:120px; height:120px; object-fit:cover; border-radius:50%; border:4px solid {current_colors['accent']}; flex-shrink:0;">
                 <div>
-                    <h2 style="color:#264653; margin-top:0;">{bio['title']}</h2>
-                    <p style="color:#555;">{bio['summary']}</p>
-                    <a href="{bio['url']}" target="_blank">Read Full Article</a>
+                    <h2 style="color:{current_colors['text_primary']}; margin-top:0;">{bio['title']}</h2>
+                    <p style="color:{current_colors['text_primary']};">{bio['summary']}</p>
+                    <a href="{bio['url']}" target="_blank" style="color:{current_colors['accent']}">Read Full Article</a>
                 </div>
             </div>
             """, unsafe_allow_html=True)
