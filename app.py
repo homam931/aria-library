@@ -19,7 +19,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# --- THEME CONFIGURATION (Removed Royal, Sunset, Cyberpunk) ---
+# --- THEME CONFIGURATION ---
 themes = {
     "Ocean 🌊 (Default)": {
         "bg_gradient": "linear-gradient(135deg, #264653 0%, #2a9d8f 100%)",
@@ -111,15 +111,15 @@ st.markdown(f"""
         border-right: 2px solid {c['border']};
     }}
 
-    /* --- FIXED INPUT BOXES (Standard Size + Clean Look) --- */
+    /* --- INPUTS --- */
     .stTextInput input, .stSelectbox div[data-baseweb="select"] {{
         background-color: {c['card_bg']} !important;
         border: 2px solid {c['border']} !important;
         border-radius: 12px !important;
         color: {c['text_primary']} !important;
         font-weight: 600;
-        padding: 10px 15px !important; /* Proper padding */
-        min-height: 45px; /* Standard height */
+        padding: 10px 15px !important; 
+        min-height: 45px; 
         box-shadow: inset 2px 2px 5px rgba(0,0,0,0.05) !important;
     }}
     .stTextInput input:focus {{
@@ -127,7 +127,7 @@ st.markdown(f"""
         box-shadow: 0 0 0 3px {c['accent']}33 !important;
     }}
 
-    /* --- RADIO BUTTONS (Menu) --- */
+    /* --- RADIO BUTTONS --- */
     .stRadio > div {{ gap: 10px; }}
     .stRadio label {{
         background-color: {c['card_bg']};
@@ -350,51 +350,46 @@ def remove_from_favorites(book_title):
     st.session_state.favorites = [b for b in st.session_state.favorites if b['title'] != book_title]
     st.rerun()
 
+# --- SWITCHED TO OPEN LIBRARY API (To fix blocking issues) ---
 @st.cache_data
-def search_google_books_api(query):
-    # REDUCED TO 10 RESULTS TO PREVENT ERRORS
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-    }
-    
-    # 1. Try Newest first
+def search_open_library_api(query):
     try:
-        url = f"https://www.googleapis.com/books/v1/volumes?q={query}&maxResults=10&orderBy=newest&langRestrict=en"
-        response = requests.get(url, headers=headers, timeout=5)
-        data = response.json()
-        if 'items' in data:
-            return parse_google_data(data)
-    except:
-        pass
-
-    # 2. Fallback: Relevance Search
-    try:
-        url = f"https://www.googleapis.com/books/v1/volumes?q={query}&maxResults=10&langRestrict=en"
-        response = requests.get(url, headers=headers, timeout=5)
-        data = response.json()
-        if 'items' in data:
-            return parse_google_data(data)
-    except:
-        pass
+        # Open Library Search API
+        url = f"https://openlibrary.org/search.json?q={query}&limit=12"
+        response = requests.get(url, timeout=10)
         
-    return []
-
-def parse_google_data(data):
-    books = []
-    for item in data.get('items', []):
-        v = item.get('volumeInfo', {})
-        img = v.get('imageLinks', {}).get('thumbnail', '')
-        desc = v.get('description', 'No description available.')
-        book_entry = {
-            "title": v.get('title', 'Unknown Title'),
-            "author": ", ".join(v.get('authors', ['Unknown'])),
-            "year": v.get('publishedDate', '')[:4],
-            "desc": desc,
-            "image": img,
-            "link": v.get('infoLink', '#')
-        }
-        books.append(book_entry)
-    return books
+        if response.status_code != 200:
+            return []
+            
+        data = response.json()
+        books = []
+        
+        for item in data.get('docs', []):
+            # Extract data safely
+            title = item.get('title', 'Unknown')
+            author = item.get('author_name', ['Unknown'])[0]
+            year = item.get('first_publish_year', 'N/A')
+            cover_id = item.get('cover_i')
+            
+            # Construct Image URL
+            img_url = f"https://covers.openlibrary.org/b/id/{cover_id}-M.jpg" if cover_id else "https://via.placeholder.com/150x220?text=No+Cover"
+            
+            # Construct Google Search Link for details
+            google_link = f"https://www.google.com/search?q={title}+{author}+book"
+            
+            book_entry = {
+                "title": title,
+                "author": author,
+                "year": str(year),
+                "desc": "Details available on search.", # Open Library search doesn't return desc
+                "image": img_url,
+                "link": google_link
+            }
+            books.append(book_entry)
+            
+        return books
+    except:
+        return []
 
 def get_wiki_bio(name):
     headers = {'User-Agent': 'AriaLibBot/5.0'}
@@ -412,9 +407,9 @@ def get_wiki_bio(name):
         return None
     return None
 
-# --- AUDIO SYSTEM (SIMPLIFIED) ---
+# --- AUDIO SYSTEM (AUTO VOICE) ---
 async def edge_tts_save(text, filename):
-    # Using a standard neutral/female voice without gender selection UI
+    # Fixed High-Quality Female Voice (Mobile Friendly)
     voice = "en-AU-NatashaNeural" 
     communicate = edge_tts.Communicate(text, voice)
     await communicate.save(filename)
@@ -428,7 +423,6 @@ def get_audio(text):
         return filename
     except:
         try:
-            # Fallback to gTTS if edge-tts fails
             tts = gTTS(text=text, lang='en', tld='com.au')
             tts.save(filename)
             return filename
@@ -437,7 +431,7 @@ def get_audio(text):
 
 # --- UI LAYOUT ---
 
-# Sidebar Navigation (3D Styled)
+# Sidebar Navigation
 st.sidebar.markdown("### 🏛️ Main Menu")
 nav = st.sidebar.radio("", 
     ["🏆 Top 200 Books", "🔍 Global Search", "❤️ Favorites", "🌟 Hall of Fame", "🗣️ Practice Chat"],
@@ -491,8 +485,8 @@ if nav == "🏆 Top 200 Books":
 
 # === TAB 2: SEARCH ===
 elif nav == "🔍 Global Search":
-    st.subheader("🌍 Google Books Search")
-    st.caption("Searching live global archives.")
+    st.subheader("🌍 Open Library Search")
+    st.caption("Powered by Open Library API. (No blocking, 100% Reliable)")
     
     with st.form("search_form"):
         col_s1, col_s2 = st.columns([4, 1])
@@ -504,18 +498,18 @@ elif nav == "🔍 Global Search":
             submitted = st.form_submit_button("🔎 Search")
             
     if submitted and query:
-        with st.spinner("Connecting to global library network..."):
-            st.session_state.search_results = search_google_books_api(query)
+        with st.spinner("Connecting to global archives..."):
+            st.session_state.search_results = search_open_library_api(query)
             
     if 'search_results' in st.session_state and st.session_state.search_results:
         grid_cols = st.columns(4)
         for idx, book in enumerate(st.session_state.search_results):
             with grid_cols[idx % 4]:
-                cover_img = book['image'] if book['image'] else "https://via.placeholder.com/150x220?text=No+Cover"
+                cover_img = book['image']
                 st.markdown(f"""
                 <div class="book-card">
                     <div>
-                        <img src="{cover_img}" class="book-cover-img">
+                        <img src="{cover_img}" style="width:100%; height:200px; object-fit:cover; border-radius:10px;">
                         <h5 class="book-title">{book['title'][:50]}...</h5>
                         <p class="book-author">{book['author'][:30]}</p>
                     </div>
@@ -526,12 +520,10 @@ elif nav == "🔍 Global Search":
                     if st.button("❤️ Save", key=f"search_{idx}", help="Save", use_container_width=True):
                         add_to_favorites(book)
                 with c_btn2:
-                    with st.popover("📖 Info"):
-                        st.subheader(book['title'])
-                        st.write(book['desc'])
-                        st.markdown(f"[View on Google]({book['link']})")
+                     st.markdown(f"<a href='{book['link']}' target='_blank' style='display:block; text-align:center; padding:10px; background:#eee; border-radius:5px; text-decoration:none; color:#333; font-weight:bold; margin-top:5px;'>📖 Info</a>", unsafe_allow_html=True)
+
     elif submitted:
-        st.warning("No results found. Try a broader term.")
+        st.warning("No results found.")
 
 # === TAB 3: FAVORITES ===
 elif nav == "❤️ Favorites":
@@ -580,7 +572,7 @@ elif nav == "🗣️ Practice Chat":
     st.subheader("💬 Patron Roleplay")
     col_set, col_play = st.columns([1, 2])
     with col_set:
-        st.write("Generate a new patron scenario:")
+        st.write("Click to generate a scenario (Auto-Voice: Female AU)")
         if st.button("🎲 New Customer", type="primary", use_container_width=True):
             book = random.choice(st.session_state.top_books_db)
             templates = [
