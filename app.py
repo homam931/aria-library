@@ -19,7 +19,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# --- THEME CONFIGURATION ---
+# --- THEME CONFIGURATION (Removed Royal, Sunset, Cyberpunk) ---
 themes = {
     "Ocean 🌊 (Default)": {
         "bg_gradient": "linear-gradient(135deg, #264653 0%, #2a9d8f 100%)",
@@ -51,16 +51,6 @@ themes = {
         "accent": "#a1887f",
         "border": "#d7c08e"
     },
-    "Cyberpunk 🤖": {
-        "bg_gradient": "linear-gradient(135deg, #2b003e 0%, #000000 100%)",
-        "btn_grad": "linear-gradient(90deg, #ff0099 0%, #493240 100%)",
-        "sidebar_bg": "#0b0c15",
-        "card_bg": "#1a1a2e",
-        "text_primary": "#ffffff",
-        "text_secondary": "#00f3ff",
-        "accent": "#ff0099",
-        "border": "#ff0099"
-    },
     "Classic 🏛️": {
         "bg_gradient": "linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%)",
         "btn_grad": "linear-gradient(90deg, #2c3e50 0%, #34495e 100%)",
@@ -80,26 +70,6 @@ themes = {
         "text_secondary": "#558b2f",
         "accent": "#2e7d32",
         "border": "#a5d6a7"
-    },
-    "Royal 👑": {
-        "bg_gradient": "linear-gradient(135deg, #4b134f 0%, #c94b4b 100%)",
-        "btn_grad": "linear-gradient(90deg, #8e24aa 0%, #ab47bc 100%)",
-        "sidebar_bg": "#f3e5f5",
-        "card_bg": "#ffffff",
-        "text_primary": "#4a148c",
-        "text_secondary": "#7b1fa2",
-        "accent": "#8e24aa",
-        "border": "#e1bee7"
-    },
-    "Sunset 🌅": {
-        "bg_gradient": "linear-gradient(135deg, #ff512f 0%, #dd2476 100%)",
-        "btn_grad": "linear-gradient(90deg, #ff512f 0%, #f09819 100%)",
-        "sidebar_bg": "#fff3e0",
-        "card_bg": "#ffffff",
-        "text_primary": "#bf360c",
-        "text_secondary": "#f57c00",
-        "accent": "#ff6f00",
-        "border": "#ffcc80"
     }
 }
 
@@ -125,115 +95,107 @@ st.markdown(f"""
     /* BACKGROUND */
     .stApp {{ background-color: {c.get('sidebar_bg', '#fff')} !important; }}
 
-    /* HEADER - EXTREME 3D */
+    /* HEADER */
     .main-header {{
         background: {c['bg_gradient']};
         padding: 3rem; border-radius: 30px; color: white; margin-bottom: 2.5rem;
-        box-shadow: 0 20px 50px -10px rgba(0,0,0,0.5), inset 0 2px 5px rgba(255,255,255,0.2); 
+        box-shadow: 0 15px 40px rgba(0,0,0,0.3); 
         text-align: center; 
-        border: 3px solid rgba(255,255,255,0.15);
+        border: 2px solid rgba(255,255,255,0.1);
     }}
-    .main-header h1 {{ font-weight: 800; text-shadow: 0 5px 10px rgba(0,0,0,0.4); font-size: 3rem; }}
+    .main-header h1 {{ font-weight: 800; text-shadow: 0 4px 8px rgba(0,0,0,0.3); font-size: 2.8rem; }}
 
     /* SIDEBAR */
     section[data-testid="stSidebar"] {{
         background-color: {c['sidebar_bg']};
         border-right: 2px solid {c['border']};
-        box-shadow: 5px 0 15px rgba(0,0,0,0.05);
     }}
 
-    /* --- GIANT SEARCH INPUT & SELECTBOX --- */
+    /* --- FIXED INPUT BOXES (Standard Size + Clean Look) --- */
     .stTextInput input, .stSelectbox div[data-baseweb="select"] {{
         background-color: {c['card_bg']} !important;
-        border: 4px solid {c['border']} !important;
-        border-radius: 18px !important;
+        border: 2px solid {c['border']} !important;
+        border-radius: 12px !important;
         color: {c['text_primary']} !important;
-        font-weight: 700;
-        font-size: 1.2rem !important; /* Larger Text */
-        box-shadow: inset 4px 4px 10px rgba(0,0,0,0.1), inset -3px -3px 8px rgba(255,255,255,0.5) !important;
-        height: 65px !important; /* Taller Input */
-        padding-left: 20px !important;
+        font-weight: 600;
+        padding: 10px 15px !important; /* Proper padding */
+        min-height: 45px; /* Standard height */
+        box-shadow: inset 2px 2px 5px rgba(0,0,0,0.05) !important;
     }}
-    .stTextInput input:focus, .stSelectbox div[data-baseweb="select"]:focus-within {{
+    .stTextInput input:focus {{
         border-color: {c['accent']} !important;
-        box-shadow: 0 0 0 5px {c['accent']}33, inset 2px 2px 5px rgba(0,0,0,0.1) !important;
+        box-shadow: 0 0 0 3px {c['accent']}33 !important;
     }}
 
-    /* --- 3D RADIO BUTTONS --- */
-    .stRadio > div {{ gap: 12px; }}
+    /* --- RADIO BUTTONS (Menu) --- */
+    .stRadio > div {{ gap: 10px; }}
     .stRadio label {{
         background-color: {c['card_bg']};
-        border: 3px solid {c['border']};
-        border-radius: 15px;
-        padding: 18px 22px;
+        border: 2px solid {c['border']};
+        border-radius: 12px;
+        padding: 12px 15px;
         color: {c['text_primary']};
-        font-weight: 700;
+        font-weight: 600;
         cursor: pointer;
-        transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        transition: all 0.2s;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         display: flex; width: 100%;
     }}
     .stRadio label:has(div[aria-checked="true"]) {{
         background: {c['btn_grad']} !important;
         color: white !important;
         border-color: transparent;
-        transform: translateY(-4px) scale(1.02);
-        box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        transform: scale(1.02);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }}
+    .stRadio div[role="radiogroup"] > label > div:first-child {{ display: none; }}
 
-    /* --- CARDS (High Lift) --- */
+    /* --- CARDS --- */
     .book-card, .small-book-card {{
         background: {c['card_bg']};
-        border-radius: 20px;
-        padding: 20px;
-        border: 3px solid {c['border']};
-        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        border-radius: 16px;
+        padding: 15px;
+        border: 2px solid {c['border']};
+        box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+        transition: all 0.3s;
         display: flex; flex-direction: column; justify-content: space-between;
         height: 100%; min-height: 250px;
     }}
     .book-card:hover, .small-book-card:hover {{
-        transform: translateY(-10px) scale(1.03);
-        box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.15);
         border-color: {c['accent']};
-        z-index: 10;
     }}
 
     /* --- BUTTONS --- */
     .stButton > button {{
         background: {c['btn_grad']} !important;
         color: white !important;
-        font-weight: 800;
-        border-radius: 15px;
-        height: 65px; /* Matches Input Height */
+        font-weight: 700;
+        border-radius: 12px;
+        height: 48px;
         border: none;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.25), inset 0 2px 5px rgba(255,255,255,0.3);
-        border-bottom: 5px solid rgba(0,0,0,0.2); 
-        transition: all 0.2s;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        transition: 0.2s;
         width: 100%;
-        font-size: 1.1rem !important;
     }}
     .stButton > button:hover {{
-        transform: translateY(-4px);
-        box-shadow: 0 12px 30px rgba(0,0,0,0.35);
-    }}
-    .stButton > button:active {{
-        transform: translateY(2px);
-        border-bottom-width: 2px;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
     }}
 
     /* TEXT FIXES */
-    .book-title, .small-title {{ color: {c['text_primary']} !important; font-weight: 800; margin-top: 12px; font-size: 1.05rem; }}
-    .book-author, .small-author {{ color: {c['text_secondary']} !important; font-weight: 700; }}
+    .book-title, .small-title {{ color: {c['text_primary']} !important; font-weight: 700; margin-top: 10px; font-size: 1rem; }}
+    .book-author, .small-author {{ color: {c['text_secondary']} !important; font-weight: 600; font-size: 0.85rem; }}
     p, span, div, h1, h2, h3 {{ color: {c['text_primary']}; }}
     
     /* CHAT BUBBLE */
     .chat-bubble {{
-        background: {c['card_bg']}; padding: 25px; border-radius: 25px;
-        border-left: 8px solid {c['accent']};
-        box-shadow: 5px 5px 20px rgba(0,0,0,0.15);
-        border: 2px solid {c['border']};
-        font-size: 1.15rem; font-weight: 600;
+        background: {c['card_bg']}; padding: 20px; border-radius: 20px;
+        border-left: 6px solid {c['accent']};
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        border: 1px solid {c['border']};
+        font-size: 1.1rem;
     }}
 </style>
 """, unsafe_allow_html=True)
@@ -390,25 +352,25 @@ def remove_from_favorites(book_title):
 
 @st.cache_data
 def search_google_books_api(query):
-    # FALLBACK LOGIC TO FIX EMPTY RESULTS
+    # REDUCED TO 10 RESULTS TO PREVENT ERRORS
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
     }
     
-    # 1. Try Newest first (Likely to fail on general terms but good for new books)
+    # 1. Try Newest first
     try:
-        url = f"https://www.googleapis.com/books/v1/volumes?q={query}&maxResults=20&orderBy=newest&langRestrict=en"
-        response = requests.get(url, headers=headers, timeout=8)
+        url = f"https://www.googleapis.com/books/v1/volumes?q={query}&maxResults=10&orderBy=newest&langRestrict=en"
+        response = requests.get(url, headers=headers, timeout=5)
         data = response.json()
         if 'items' in data:
             return parse_google_data(data)
     except:
-        pass # If fails, move to step 2
+        pass
 
-    # 2. Fallback: Relevance Search (More robust)
+    # 2. Fallback: Relevance Search
     try:
-        url = f"https://www.googleapis.com/books/v1/volumes?q={query}&maxResults=40&langRestrict=en"
-        response = requests.get(url, headers=headers, timeout=8)
+        url = f"https://www.googleapis.com/books/v1/volumes?q={query}&maxResults=10&langRestrict=en"
+        response = requests.get(url, headers=headers, timeout=5)
         data = response.json()
         if 'items' in data:
             return parse_google_data(data)
@@ -450,21 +412,23 @@ def get_wiki_bio(name):
         return None
     return None
 
-# --- AUDIO SYSTEM ---
-async def edge_tts_save(text, voice, filename):
+# --- AUDIO SYSTEM (SIMPLIFIED) ---
+async def edge_tts_save(text, filename):
+    # Using a standard neutral/female voice without gender selection UI
+    voice = "en-AU-NatashaNeural" 
     communicate = edge_tts.Communicate(text, voice)
     await communicate.save(filename)
 
-def get_audio(text, gender):
-    voice = "en-AU-WilliamNeural" if gender == "Male" else "en-AU-NatashaNeural"
+def get_audio(text):
     filename = "temp_audio.mp3"
     try:
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
-        loop.run_until_complete(edge_tts_save(text, voice, filename))
+        loop.run_until_complete(edge_tts_save(text, filename))
         return filename
     except:
         try:
+            # Fallback to gTTS if edge-tts fails
             tts = gTTS(text=text, lang='en', tld='com.au')
             tts.save(filename)
             return filename
@@ -528,7 +492,7 @@ if nav == "🏆 Top 200 Books":
 # === TAB 2: SEARCH ===
 elif nav == "🔍 Global Search":
     st.subheader("🌍 Google Books Search")
-    st.caption("Searching live global archives. (Sorted by relevance/recency)")
+    st.caption("Searching live global archives.")
     
     with st.form("search_form"):
         col_s1, col_s2 = st.columns([4, 1])
@@ -616,19 +580,16 @@ elif nav == "🗣️ Practice Chat":
     st.subheader("💬 Patron Roleplay")
     col_set, col_play = st.columns([1, 2])
     with col_set:
-        st.markdown("**Voice Selection:**")
-        gender = st.radio("", ["Female", "Male"], horizontal=True, label_visibility="collapsed")
-        st.write("")
+        st.write("Generate a new patron scenario:")
         if st.button("🎲 New Customer", type="primary", use_container_width=True):
             book = random.choice(st.session_state.top_books_db)
-            g_code = "Female" if gender == "Female" else "Male"
             templates = [
                 f"Hi! Do you have '{book['title']}'? I heard it's great.",
                 f"I'm looking for '{book['title']}' by {book['author']}.",
                 f"Can you help me find the section for {book['genre']} books?"
             ]
             st.session_state.chat_text = random.choice(templates)
-            st.session_state.chat_audio_file = get_audio(st.session_state.chat_text, g_code)
+            st.session_state.chat_audio_file = get_audio(st.session_state.chat_text)
             st.rerun()
     with col_play:
         if 'chat_text' in st.session_state:
