@@ -24,270 +24,217 @@ themes = {
     "Ocean 🌊 (Default)": {
         "bg_gradient": "linear-gradient(135deg, #264653 0%, #2a9d8f 100%)",
         "btn_grad": "linear-gradient(90deg, #264653 0%, #2a9d8f 100%)",
-        "sidebar_bg": "#f0f8ff",
-        "sidebar_text": "#264653",
+        "sidebar_bg": "#eef6f9",
         "card_bg": "#ffffff",
-        "card_border": "#b2dfdb",
         "text_primary": "#2c3e50",
         "text_secondary": "#e76f51",
         "accent": "#2a9d8f",
-        "badge_bg": "#e9c46a",
-        "badge_text": "#264653"
+        "border": "#b2dfdb"
     },
     "Midnight 🌑 (Dark)": {
         "bg_gradient": "linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%)",
         "btn_grad": "linear-gradient(90deg, #4db6ac 0%, #80cbc4 100%)",
         "sidebar_bg": "#121212",
-        "sidebar_text": "#ffffff",
         "card_bg": "#1e1e1e",
-        "card_border": "#333333",
         "text_primary": "#e0e0e0",
         "text_secondary": "#4db6ac",
         "accent": "#80cbc4",
-        "badge_bg": "#ffca28",
-        "badge_text": "#000000"
+        "border": "#333333"
     },
     "Vintage 📜": {
         "bg_gradient": "linear-gradient(135deg, #8e44ad 0%, #c0392b 100%)",
         "btn_grad": "linear-gradient(90deg, #d7c08e 0%, #bcaaa4 100%)",
-        "main_bg_color": "#fdf6e3",
         "sidebar_bg": "#f4e4bc",
-        "sidebar_text": "#4b3621",
         "card_bg": "#fffbf0",
-        "card_border": "#d7c08e",
         "text_primary": "#5d4037",
         "text_secondary": "#8d6e63",
         "accent": "#a1887f",
-        "badge_bg": "#8d6e63",
-        "badge_text": "#ffffff"
+        "border": "#d7c08e"
     },
     "Cyberpunk 🤖": {
         "bg_gradient": "linear-gradient(135deg, #2b003e 0%, #000000 100%)",
         "btn_grad": "linear-gradient(90deg, #ff0099 0%, #493240 100%)",
         "sidebar_bg": "#0b0c15",
-        "sidebar_text": "#00f3ff",
         "card_bg": "#1a1a2e",
-        "card_border": "#ff0099",
         "text_primary": "#ffffff",
         "text_secondary": "#00f3ff",
         "accent": "#ff0099",
-        "badge_bg": "#00f3ff",
-        "badge_text": "#000000"
+        "border": "#ff0099"
     },
     "Classic 🏛️": {
         "bg_gradient": "linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%)",
         "btn_grad": "linear-gradient(90deg, #2c3e50 0%, #34495e 100%)",
         "sidebar_bg": "#ffffff",
-        "sidebar_text": "#2c3e50",
         "card_bg": "#ffffff",
-        "card_border": "#bdc3c7",
         "text_primary": "#2c3e50",
         "text_secondary": "#7f8c8d",
         "accent": "#2980b9",
-        "badge_bg": "#ecf0f1",
-        "badge_text": "#2c3e50"
+        "border": "#bdc3c7"
     },
     "Forest 🌲": {
         "bg_gradient": "linear-gradient(135deg, #134e5e 0%, #71b280 100%)",
         "btn_grad": "linear-gradient(90deg, #11998e 0%, #38ef7d 100%)",
         "sidebar_bg": "#e8f5e9",
-        "sidebar_text": "#1b5e20",
         "card_bg": "#ffffff",
-        "card_border": "#a5d6a7",
         "text_primary": "#2e7d32",
         "text_secondary": "#558b2f",
         "accent": "#2e7d32",
-        "badge_bg": "#c8e6c9",
-        "badge_text": "#1b5e20"
+        "border": "#a5d6a7"
     },
     "Royal 👑": {
         "bg_gradient": "linear-gradient(135deg, #4b134f 0%, #c94b4b 100%)",
         "btn_grad": "linear-gradient(90deg, #8e24aa 0%, #ab47bc 100%)",
         "sidebar_bg": "#f3e5f5",
-        "sidebar_text": "#4a148c",
         "card_bg": "#ffffff",
-        "card_border": "#e1bee7",
         "text_primary": "#4a148c",
         "text_secondary": "#7b1fa2",
         "accent": "#8e24aa",
-        "badge_bg": "#ffd700",
-        "badge_text": "#4a148c"
+        "border": "#e1bee7"
     },
     "Sunset 🌅": {
         "bg_gradient": "linear-gradient(135deg, #ff512f 0%, #dd2476 100%)",
         "btn_grad": "linear-gradient(90deg, #ff512f 0%, #f09819 100%)",
         "sidebar_bg": "#fff3e0",
-        "sidebar_text": "#e65100",
         "card_bg": "#ffffff",
-        "card_border": "#ffcc80",
         "text_primary": "#bf360c",
         "text_secondary": "#f57c00",
         "accent": "#ff6f00",
-        "badge_bg": "#ffcc80",
-        "badge_text": "#bf360c"
+        "border": "#ffcc80"
     }
 }
 
-# Initialize Theme State
+# Theme Init
 if 'current_theme' not in st.session_state:
     st.session_state.current_theme = "Ocean 🌊 (Default)"
 
-# --- SIDEBAR UI ---
+# --- SIDEBAR & STYLING ---
 st.sidebar.markdown("### 🎨 Theme Settings")
 selected_theme_name = st.sidebar.selectbox("Select Theme:", list(themes.keys()), index=0)
 st.session_state.current_theme = selected_theme_name
 c = themes[st.session_state.current_theme]
 
-# --- DYNAMIC CSS ---
 st.markdown(f"""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
     
     html, body, [class*="css"] {{
         font-family: 'Poppins', sans-serif;
         color: {c['text_primary']};
     }}
     
-    .stApp {{
-        background-color: {c.get('main_bg_color', '#ffffff')} !important;
-    }}
+    /* BACKGROUND */
+    .stApp {{ background-color: {c.get('sidebar_bg', '#fff')} !important; }}
 
-    /* HEADER */
+    /* HEADER - 3D & BOLD */
     .main-header {{
         background: {c['bg_gradient']};
-        padding: 2.5rem; 
-        border-radius: 20px; 
-        color: white; 
-        margin-bottom: 2.5rem;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
-        text-align: center;
-        border: 1px solid rgba(255,255,255,0.2);
+        padding: 2.5rem; border-radius: 25px; color: white; margin-bottom: 2rem;
+        box-shadow: 0 15px 40px -10px rgba(0,0,0,0.3); 
+        text-align: center; border: 2px solid rgba(255,255,255,0.1);
     }}
-    .main-header h1 {{ font-weight: 700; letter-spacing: -1px; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }}
+    .main-header h1 {{ font-weight: 800; text-shadow: 0 4px 6px rgba(0,0,0,0.3); font-size: 2.5rem; }}
 
     /* SIDEBAR */
     section[data-testid="stSidebar"] {{
         background-color: {c['sidebar_bg']};
-        border-right: 1px solid {c['card_border']};
-    }}
-    
-    /* Active Sidebar Item */
-    .stRadio > div > label[data-baseweb="radio"] > div:first-child {{
-        background-color: transparent !important;
-        border-color: transparent !important; 
-    }}
-    .stRadio > div > label {{
-        background-color: transparent;
-        color: {c['sidebar_text']};
-        padding: 12px 15px;
-        margin-bottom: 8px;
-        border-radius: 12px;
-        border: 1px solid transparent;
-        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        cursor: pointer;
-        font-weight: 500;
-    }}
-    .stRadio > div > label:has(div[aria-checked="true"]) {{
-        background: {c['btn_grad']} !important;
-        color: white !important;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        transform: scale(1.02);
-        font-weight: 700;
+        border-right: 1px solid {c['border']};
     }}
 
-    /* GLOBAL TEXT COLOR FIX */
-    .stMarkdown, .stText, p, h1, h2, h3, h4, h5, li, span, div {{
+    /* --- BOLD INPUTS & SELECTBOXES --- */
+    .stTextInput input, .stSelectbox div[data-baseweb="select"] {{
+        background-color: {c['card_bg']} !important;
+        border: 2px solid {c['border']} !important;
+        border-radius: 12px !important;
         color: {c['text_primary']} !important;
+        font-weight: 600;
+        box-shadow: inset 2px 2px 5px rgba(0,0,0,0.05) !important; /* Inner Shadow */
+        height: 50px;
     }}
-    .main-header *, button * {{
-        color: inherit !important;
+    .stTextInput input:focus, .stSelectbox div[data-baseweb="select"]:focus-within {{
+        border-color: {c['accent']} !important;
+        box-shadow: 0 0 0 3px {c['accent']}33 !important;
+    }}
+
+    /* --- 3D RADIO BUTTONS (Voice & Menu) --- */
+    /* Container styling */
+    .stRadio > div {{ gap: 10px; }}
+    
+    /* Unchecked State */
+    .stRadio label {{
+        background-color: {c['card_bg']};
+        border: 2px solid {c['border']};
+        border-radius: 12px;
+        padding: 15px 20px;
+        color: {c['text_primary']};
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05); /* Soft 3D lift */
+        display: flex; width: 100%;
     }}
     
-    /* CARDS */
-    .small-book-card, .book-card {{
+    /* Checked State (Simulated) */
+    .stRadio label:has(div[aria-checked="true"]) {{
+        background: {c['btn_grad']} !important;
+        color: white !important;
+        border-color: transparent;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+    }}
+    .stRadio label:hover {{
+        border-color: {c['accent']};
+    }}
+    /* Hide default circle */
+    .stRadio div[role="radiogroup"] > label > div:first-child {{
+        display: none;
+    }}
+
+    /* --- CARDS --- */
+    .book-card, .small-book-card {{
         background: {c['card_bg']};
         border-radius: 16px;
         padding: 15px;
-        height: 100%;
-        min-height: 240px;
-        border: 1px solid {c['card_border']};
-        transition: all 0.3s ease;
+        border: 1px solid {c['border']};
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        transition: all 0.3s;
         display: flex; flex-direction: column; justify-content: space-between;
-        position: relative;
-        overflow: hidden;
+        height: 100%; min-height: 250px;
     }}
-    .small-book-card:hover, .book-card:hover {{
-        transform: translateY(-8px);
-        box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+    .book-card:hover, .small-book-card:hover {{
+        transform: translateY(-5px) scale(1.02);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.15);
         border-color: {c['accent']};
     }}
-    
-    /* BADGES */
-    .small-badge {{
-        position: absolute; top: 10px; right: 10px;
-        background: {c['badge_bg']}; 
-        color: {c['badge_text']} !important;
-        padding: 4px 12px; 
-        border-radius: 20px; 
-        font-size: 0.7rem; 
-        font-weight: 700;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        z-index: 2;
-    }}
 
-    /* BUTTONS */
+    /* --- BUTTONS --- */
     .stButton > button {{
-        width: 100%;
-        border-radius: 12px;
-        font-weight: 600;
-        color: white !important;
         background: {c['btn_grad']} !important;
+        color: white !important;
+        font-weight: 700;
+        border-radius: 12px;
+        height: 50px;
         border: none;
-        height: 48px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        transition: 0.2s;
+        width: 100%;
     }}
     .stButton > button:hover {{
-        transform: translateY(-2px);
-        box-shadow: 0 6px 15px rgba(0,0,0,0.25);
-        filter: brightness(1.1);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
     }}
-    .stButton > button:active {{
-        transform: translateY(1px);
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }}
+    .stButton > button:active {{ transform: scale(0.98); }}
 
-    /* TEXT STYLES */
-    .small-title, .book-title {{
-        font-size: 0.95rem; font-weight: 700;
-        color: {c['text_primary']} !important;
-        margin-top: 15px; line-height: 1.4;
-    }}
-    .small-author, .book-author {{
-        font-size: 0.8rem;
-        color: {c['text_secondary']} !important;
-        font-weight: 500;
-        margin-bottom: 10px;
-    }}
+    /* TEXT FIXES */
+    .book-title, .small-title {{ color: {c['text_primary']} !important; font-weight: 700; margin-top: 10px; }}
+    .book-author, .small-author {{ color: {c['text_secondary']} !important; font-weight: 600; }}
+    p, span, div, h1, h2, h3 {{ color: {c['text_primary']}; }}
     
-    /* CHAT BUBBLES */
+    /* CHAT BUBBLE */
     .chat-bubble {{
-        background-color: {c['card_bg']};
-        padding: 20px; border-radius: 20px; border-bottom-left-radius: 2px;
-        border-left: 5px solid {c['accent']};
-        color: {c['text_primary']} !important;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    }}
-    
-    /* INPUTS */
-    input[type="text"] {{
-        background-color: {c['card_bg']} !important;
-        color: {c['text_primary']} !important;
-        border: 2px solid {c['card_border']} !important;
-        border-radius: 12px;
-        padding: 10px;
+        background: {c['card_bg']}; padding: 20px; border-radius: 20px;
+        border-left: 6px solid {c['accent']};
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        font-size: 1.1rem; font-weight: 500;
     }}
 </style>
 """, unsafe_allow_html=True)
@@ -444,31 +391,49 @@ def remove_from_favorites(book_title):
 
 @st.cache_data
 def search_google_books_api(query):
+    # FALLBACK LOGIC TO FIX EMPTY RESULTS
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+    }
+    
+    # 1. Try Newest first (Likely to fail on general terms but good for new books)
     try:
-        # UPDATED: Max allowed by API is 40. Order by Newest.
-        url = f"https://www.googleapis.com/books/v1/volumes?q={query}&maxResults=40&orderBy=newest&langRestrict=en"
-        response = requests.get(url, timeout=10) # Increased timeout
-        if response.status_code != 200:
-            return []
+        url = f"https://www.googleapis.com/books/v1/volumes?q={query}&maxResults=20&orderBy=newest&langRestrict=en"
+        response = requests.get(url, headers=headers, timeout=8)
         data = response.json()
-        books = []
         if 'items' in data:
-            for item in data['items']:
-                v = item.get('volumeInfo', {})
-                img = v.get('imageLinks', {}).get('thumbnail', '')
-                desc = v.get('description', 'No description available.')
-                book_entry = {
-                    "title": v.get('title', 'Unknown Title'),
-                    "author": ", ".join(v.get('authors', ['Unknown'])),
-                    "year": v.get('publishedDate', '')[:4],
-                    "desc": desc,
-                    "image": img,
-                    "link": v.get('infoLink', '#')
-                }
-                books.append(book_entry)
-        return books
+            return parse_google_data(data)
     except:
-        return []
+        pass # If fails, move to step 2
+
+    # 2. Fallback: Relevance Search (More robust)
+    try:
+        url = f"https://www.googleapis.com/books/v1/volumes?q={query}&maxResults=40&langRestrict=en"
+        response = requests.get(url, headers=headers, timeout=8)
+        data = response.json()
+        if 'items' in data:
+            return parse_google_data(data)
+    except:
+        pass
+        
+    return []
+
+def parse_google_data(data):
+    books = []
+    for item in data.get('items', []):
+        v = item.get('volumeInfo', {})
+        img = v.get('imageLinks', {}).get('thumbnail', '')
+        desc = v.get('description', 'No description available.')
+        book_entry = {
+            "title": v.get('title', 'Unknown Title'),
+            "author": ", ".join(v.get('authors', ['Unknown'])),
+            "year": v.get('publishedDate', '')[:4],
+            "desc": desc,
+            "image": img,
+            "link": v.get('infoLink', '#')
+        }
+        books.append(book_entry)
+    return books
 
 def get_wiki_bio(name):
     headers = {'User-Agent': 'AriaLibBot/5.0'}
@@ -509,7 +474,7 @@ def get_audio(text, gender):
 
 # --- UI LAYOUT ---
 
-# Sidebar Navigation
+# Sidebar Navigation (3D Styled)
 st.sidebar.markdown("### 🏛️ Main Menu")
 nav = st.sidebar.radio("", 
     ["🏆 Top 200 Books", "🔍 Global Search", "❤️ Favorites", "🌟 Hall of Fame", "🗣️ Practice Chat"],
@@ -564,7 +529,7 @@ if nav == "🏆 Top 200 Books":
 # === TAB 2: SEARCH ===
 elif nav == "🔍 Global Search":
     st.subheader("🌍 Google Books Search")
-    st.caption("Showing max 40 results sorted by Newest first.")
+    st.caption("Searching live global archives. (Sorted by relevance/recency)")
     
     with st.form("search_form"):
         col_s1, col_s2 = st.columns([4, 1])
@@ -576,7 +541,7 @@ elif nav == "🔍 Global Search":
             submitted = st.form_submit_button("🔎 Search")
             
     if submitted and query:
-        with st.spinner("Searching global archives..."):
+        with st.spinner("Connecting to global library network..."):
             st.session_state.search_results = search_google_books_api(query)
             
     if 'search_results' in st.session_state and st.session_state.search_results:
@@ -603,7 +568,7 @@ elif nav == "🔍 Global Search":
                         st.write(book['desc'])
                         st.markdown(f"[View on Google]({book['link']})")
     elif submitted:
-        st.warning("No results found. Try a different term.")
+        st.warning("No results found. Try a broader term.")
 
 # === TAB 3: FAVORITES ===
 elif nav == "❤️ Favorites":
@@ -652,7 +617,9 @@ elif nav == "🗣️ Practice Chat":
     st.subheader("💬 Patron Roleplay")
     col_set, col_play = st.columns([1, 2])
     with col_set:
-        gender = st.radio("Voice:", ["Female", "Male"], horizontal=True)
+        st.markdown("**Voice Selection:**")
+        gender = st.radio("", ["Female", "Male"], horizontal=True, label_visibility="collapsed")
+        st.write("")
         if st.button("🎲 New Customer", type="primary", use_container_width=True):
             book = random.choice(st.session_state.top_books_db)
             g_code = "Female" if gender == "Female" else "Male"
