@@ -129,7 +129,6 @@ st.markdown(f"""
     .main-header {{
         background: {c['bg_gradient']};
         padding: 3rem; border-radius: 30px; color: white; margin-bottom: 2.5rem;
-        /* Multiple strong shadows for depth */
         box-shadow: 0 20px 50px -10px rgba(0,0,0,0.5), inset 0 2px 5px rgba(255,255,255,0.2); 
         text-align: center; 
         border: 3px solid rgba(255,255,255,0.15);
@@ -143,26 +142,25 @@ st.markdown(f"""
         box-shadow: 5px 0 15px rgba(0,0,0,0.05);
     }}
 
-    /* --- BOLD INPUTS (Sunken Look) --- */
+    /* --- GIANT SEARCH INPUT & SELECTBOX --- */
     .stTextInput input, .stSelectbox div[data-baseweb="select"] {{
         background-color: {c['card_bg']} !important;
-        border: 3px solid {c['border']} !important; /* Thicker border */
-        border-radius: 15px !important;
+        border: 4px solid {c['border']} !important;
+        border-radius: 18px !important;
         color: {c['text_primary']} !important;
         font-weight: 700;
-        /* Deep inner shadow */
-        box-shadow: inset 3px 3px 8px rgba(0,0,0,0.1), inset -2px -2px 5px rgba(255,255,255,0.5) !important;
-        height: 55px;
+        font-size: 1.2rem !important; /* Larger Text */
+        box-shadow: inset 4px 4px 10px rgba(0,0,0,0.1), inset -3px -3px 8px rgba(255,255,255,0.5) !important;
+        height: 65px !important; /* Taller Input */
+        padding-left: 20px !important;
     }}
     .stTextInput input:focus, .stSelectbox div[data-baseweb="select"]:focus-within {{
         border-color: {c['accent']} !important;
-        box-shadow: 0 0 0 4px {c['accent']}33, inset 2px 2px 5px rgba(0,0,0,0.1) !important;
+        box-shadow: 0 0 0 5px {c['accent']}33, inset 2px 2px 5px rgba(0,0,0,0.1) !important;
     }}
 
-    /* --- 3D RADIO BUTTONS (Voice & Menu) --- */
+    /* --- 3D RADIO BUTTONS --- */
     .stRadio > div {{ gap: 12px; }}
-    
-    /* Unchecked State (Raised) */
     .stRadio label {{
         background-color: {c['card_bg']};
         border: 3px solid {c['border']};
@@ -171,25 +169,17 @@ st.markdown(f"""
         color: {c['text_primary']};
         font-weight: 700;
         cursor: pointer;
-        transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy transition */
-        box-shadow: 0 8px 15px rgba(0,0,0,0.1), 0 3px 5px rgba(0,0,0,0.05); /* Significant lift */
+        transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        box-shadow: 0 8px 15px rgba(0,0,0,0.1);
         display: flex; width: 100%;
     }}
-    
-    /* Checked State (Pressed/Popped) */
     .stRadio label:has(div[aria-checked="true"]) {{
         background: {c['btn_grad']} !important;
         color: white !important;
         border-color: transparent;
-        transform: translateY(-4px) scale(1.02); /* Higher lift */
-        box-shadow: 0 15px 35px rgba(0,0,0,0.3); /* Huge shadow */
+        transform: translateY(-4px) scale(1.02);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.3);
     }}
-    .stRadio label:hover {{
-        transform: translateY(-2px);
-        border-color: {c['accent']};
-        box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-    }}
-    .stRadio div[role="radiogroup"] > label > div:first-child {{ display: none; }}
 
     /* --- CARDS (High Lift) --- */
     .book-card, .small-book-card {{
@@ -197,7 +187,6 @@ st.markdown(f"""
         border-radius: 20px;
         padding: 20px;
         border: 3px solid {c['border']};
-        /* Strong base shadow */
         box-shadow: 0 8px 20px rgba(0,0,0,0.1);
         transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         display: flex; flex-direction: column; justify-content: space-between;
@@ -205,34 +194,31 @@ st.markdown(f"""
     }}
     .book-card:hover, .small-book-card:hover {{
         transform: translateY(-10px) scale(1.03);
-        /* Very strong hover shadow */
         box-shadow: 0 25px 50px rgba(0,0,0,0.25);
         border-color: {c['accent']};
         z-index: 10;
     }}
 
-    /* --- BUTTONS (Physical Clicky Feel) --- */
+    /* --- BUTTONS --- */
     .stButton > button {{
         background: {c['btn_grad']} !important;
         color: white !important;
         font-weight: 800;
         border-radius: 15px;
-        height: 55px;
+        height: 65px; /* Matches Input Height */
         border: none;
-        /* Chunky shadow + inset highlight + bottom border for thickness */
         box-shadow: 0 8px 20px rgba(0,0,0,0.25), inset 0 2px 5px rgba(255,255,255,0.3);
         border-bottom: 5px solid rgba(0,0,0,0.2); 
         transition: all 0.2s;
         width: 100%;
-        letter-spacing: 0.5px;
+        font-size: 1.1rem !important;
     }}
     .stButton > button:hover {{
         transform: translateY(-4px);
-        box-shadow: 0 12px 30px rgba(0,0,0,0.35), inset 0 2px 5px rgba(255,255,255,0.3);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.35);
     }}
     .stButton > button:active {{
-        transform: translateY(2px); /* Physical press down */
-        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        transform: translateY(2px);
         border-bottom-width: 2px;
     }}
 
@@ -245,7 +231,7 @@ st.markdown(f"""
     .chat-bubble {{
         background: {c['card_bg']}; padding: 25px; border-radius: 25px;
         border-left: 8px solid {c['accent']};
-        box-shadow: 5px 5px 20px rgba(0,0,0,0.15); /* Deeper shadow */
+        box-shadow: 5px 5px 20px rgba(0,0,0,0.15);
         border: 2px solid {c['border']};
         font-size: 1.15rem; font-weight: 600;
     }}
