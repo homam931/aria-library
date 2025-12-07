@@ -19,14 +19,15 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# --- THEME CONFIGURATION (8 THEMES) ---
+# --- THEME CONFIGURATION (With Gradients for Buttons) ---
 themes = {
     "Ocean 🌊 (پیش‌فرض)": {
-        "bg_gradient": "linear-gradient(90deg, #264653 0%, #2a9d8f 100%)",
+        "bg_gradient": "linear-gradient(135deg, #264653 0%, #2a9d8f 100%)",
+        "btn_grad": "linear-gradient(90deg, #264653 0%, #2a9d8f 100%)",
         "sidebar_bg": "#f0f8ff",
         "sidebar_text": "#264653",
         "card_bg": "#ffffff",
-        "card_border": "#e0e0e0",
+        "card_border": "#b2dfdb",
         "text_primary": "#2c3e50",
         "text_secondary": "#e76f51",
         "accent": "#2a9d8f",
@@ -34,7 +35,8 @@ themes = {
         "badge_text": "#264653"
     },
     "Midnight 🌑 (شب)": {
-        "bg_gradient": "linear-gradient(90deg, #0f2027 0%, #203a43 50%, #2c5364 100%)",
+        "bg_gradient": "linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%)",
+        "btn_grad": "linear-gradient(90deg, #4db6ac 0%, #80cbc4 100%)",
         "sidebar_bg": "#121212",
         "sidebar_text": "#ffffff",
         "card_bg": "#1e1e1e",
@@ -46,8 +48,9 @@ themes = {
         "badge_text": "#000000"
     },
     "Vintage 📜 (کاغذ قدیمی)": {
-        "bg_gradient": "linear-gradient(90deg, #8e44ad 0%, #c0392b 100%)", # Not visible much but sets tone
-        "main_bg_color": "#fdf6e3", # Creamy background override
+        "bg_gradient": "linear-gradient(135deg, #8e44ad 0%, #c0392b 100%)",
+        "btn_grad": "linear-gradient(90deg, #d7c08e 0%, #bcaaa4 100%)",
+        "main_bg_color": "#fdf6e3",
         "sidebar_bg": "#f4e4bc",
         "sidebar_text": "#4b3621",
         "card_bg": "#fffbf0",
@@ -55,11 +58,12 @@ themes = {
         "text_primary": "#5d4037",
         "text_secondary": "#8d6e63",
         "accent": "#a1887f",
-        "badge_bg": "#d7ccc8",
-        "badge_text": "#3e2723"
+        "badge_bg": "#8d6e63",
+        "badge_text": "#ffffff"
     },
     "Cyberpunk 🤖 (سایبر)": {
-        "bg_gradient": "linear-gradient(90deg, #2b003e 0%, #000000 100%)",
+        "bg_gradient": "linear-gradient(135deg, #2b003e 0%, #000000 100%)",
+        "btn_grad": "linear-gradient(90deg, #ff0099 0%, #493240 100%)",
         "sidebar_bg": "#0b0c15",
         "sidebar_text": "#00f3ff",
         "card_bg": "#1a1a2e",
@@ -71,7 +75,8 @@ themes = {
         "badge_text": "#000000"
     },
     "Classic 🏛️ (کلاسیک)": {
-        "bg_gradient": "linear-gradient(90deg, #2c3e50 0%, #4ca1af 100%)",
+        "bg_gradient": "linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%)",
+        "btn_grad": "linear-gradient(90deg, #2c3e50 0%, #34495e 100%)",
         "sidebar_bg": "#ffffff",
         "sidebar_text": "#2c3e50",
         "card_bg": "#ffffff",
@@ -83,7 +88,8 @@ themes = {
         "badge_text": "#2c3e50"
     },
     "Forest 🌲 (طبیعت)": {
-        "bg_gradient": "linear-gradient(90deg, #134e5e 0%, #71b280 100%)",
+        "bg_gradient": "linear-gradient(135deg, #134e5e 0%, #71b280 100%)",
+        "btn_grad": "linear-gradient(90deg, #11998e 0%, #38ef7d 100%)",
         "sidebar_bg": "#e8f5e9",
         "sidebar_text": "#1b5e20",
         "card_bg": "#ffffff",
@@ -95,7 +101,8 @@ themes = {
         "badge_text": "#1b5e20"
     },
     "Royal 👑 (سلطنتی)": {
-        "bg_gradient": "linear-gradient(90deg, #4b134f 0%, #c94b4b 100%)",
+        "bg_gradient": "linear-gradient(135deg, #4b134f 0%, #c94b4b 100%)",
+        "btn_grad": "linear-gradient(90deg, #8e24aa 0%, #ab47bc 100%)",
         "sidebar_bg": "#f3e5f5",
         "sidebar_text": "#4a148c",
         "card_bg": "#ffffff",
@@ -107,7 +114,8 @@ themes = {
         "badge_text": "#4a148c"
     },
     "Sunset 🌅 (غروب)": {
-        "bg_gradient": "linear-gradient(90deg, #ff512f 0%, #dd2476 100%)",
+        "bg_gradient": "linear-gradient(135deg, #ff512f 0%, #dd2476 100%)",
+        "btn_grad": "linear-gradient(90deg, #ff512f 0%, #f09819 100%)",
         "sidebar_bg": "#fff3e0",
         "sidebar_text": "#e65100",
         "card_bg": "#ffffff",
@@ -133,137 +141,168 @@ c = themes[st.session_state.current_theme]
 # --- DYNAMIC CSS ---
 st.markdown(f"""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
     
     html, body, [class*="css"] {{
         font-family: 'Poppins', sans-serif;
         color: {c['text_primary']};
     }}
     
-    /* Background Override for specific themes like Vintage */
     .stApp {{
         background-color: {c.get('main_bg_color', '#ffffff')} !important;
     }}
 
-    /* HEADER */
+    /* HEADER - 3D Effect */
     .main-header {{
         background: {c['bg_gradient']};
-        padding: 2rem; border-radius: 15px; color: white; margin-bottom: 2rem;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2); text-align: center;
+        padding: 2.5rem; 
+        border-radius: 20px; 
+        color: white; 
+        margin-bottom: 2.5rem;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
+        text-align: center;
+        border: 1px solid rgba(255,255,255,0.2);
     }}
-    .main-header h1, .main-header p {{ color: white !important; }}
+    .main-header h1 {{ font-weight: 700; letter-spacing: -1px; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }}
 
-    /* SIDEBAR styling - Mobile Friendly Touch Targets */
+    /* SIDEBAR styling */
     section[data-testid="stSidebar"] {{
         background-color: {c['sidebar_bg']};
         border-right: 1px solid {c['card_border']};
     }}
     
-    /* Customizing Radio Buttons to look like Menu Items */
-    .stRadio > div {{
-        background-color: transparent;
+    /* Active Sidebar Item - POP Effect */
+    .stRadio > div > label[data-baseweb="radio"] > div:first-child {{
+        background-color: transparent !important;
+        border-color: transparent !important; 
     }}
     .stRadio > div > label {{
-        background-color: {c['card_bg']};
-        color: {c['text_primary']};
-        padding: 15px 10px; /* Bigger touch target */
+        background-color: transparent;
+        color: {c['sidebar_text']};
+        padding: 12px 15px;
         margin-bottom: 8px;
-        border-radius: 10px;
-        border: 1px solid {c['card_border']};
-        transition: all 0.2s;
+        border-radius: 12px;
+        border: 1px solid transparent;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         cursor: pointer;
         font-weight: 500;
-        display: block; /* Full width */
+    }}
+    /* When Checked (Simulated via CSS targeting the one with darker text usually, but Streamlit is tricky. 
+       We rely on the internal checked div structure) */
+    .stRadio > div > label:has(div[aria-checked="true"]) {{
+        background: {c['btn_grad']} !important;
+        color: white !important;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        transform: scale(1.02);
+        font-weight: 700;
     }}
     .stRadio > div > label:hover {{
-        background-color: {c['accent']}22; /* Light accent on hover */
-        border-color: {c['accent']};
-    }}
-    /* Selected Item */
-    .stRadio > div > label[data-baseweb="radio"] > div:first-child {{
-        background-color: {c['accent']} !important;
-        border-color: {c['accent']} !important;
+        background-color: {c['card_border']}44;
     }}
 
-    /* Generic Text Color Fix for Dark Mode */
+    /* GLOBAL TEXT COLOR FIX */
     .stMarkdown, .stText, p, h1, h2, h3, h4, h5, li, span, div {{
         color: {c['text_primary']} !important;
     }}
+    /* Exception for buttons and header text which need to be white usually */
+    .main-header *, button * {{
+        color: inherit !important;
+    }}
     
-    /* CARDS */
+    /* CARDS - Glassmorphism touch */
     .small-book-card, .book-card {{
         background: {c['card_bg']};
-        border-radius: 12px;
-        padding: 12px;
+        border-radius: 16px;
+        padding: 15px;
         height: 100%;
-        min-height: 220px;
+        min-height: 240px;
         border: 1px solid {c['card_border']};
-        transition: transform 0.2s;
+        transition: all 0.3s ease;
         display: flex; flex-direction: column; justify-content: space-between;
+        position: relative;
+        overflow: hidden;
     }}
     .small-book-card:hover, .book-card:hover {{
-        transform: translateY(-3px);
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.12);
         border-color: {c['accent']};
     }}
     
-    /* TEXT INSIDE CARDS (Explicitly Targeted) */
+    /* BADGES - Pill Shape & Pop */
+    .small-badge {{
+        position: absolute; top: 10px; right: 10px;
+        background: {c['badge_bg']}; 
+        color: {c['badge_text']} !important;
+        padding: 4px 12px; 
+        border-radius: 20px; 
+        font-size: 0.7rem; 
+        font-weight: 700;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        z-index: 2;
+    }}
+
+    /* BUTTONS - BEAUTIFUL GRADIENT & BOLD */
+    .stButton > button {{
+        width: 100%;
+        border-radius: 12px;
+        font-weight: 600;
+        color: white !important;
+        background: {c['btn_grad']} !important;
+        border: none;
+        height: 48px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }}
+    .stButton > button:hover {{
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+        filter: brightness(1.1);
+    }}
+    .stButton > button:active {{
+        transform: translateY(1px);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }}
+
+    /* TEXT STYLES */
     .small-title, .book-title {{
-        font-size: 0.9rem; font-weight: 700;
+        font-size: 0.95rem; font-weight: 700;
         color: {c['text_primary']} !important;
-        margin-top: 10px; line-height: 1.3;
+        margin-top: 15px; line-height: 1.4;
     }}
     .small-author, .book-author {{
         font-size: 0.8rem;
         color: {c['text_secondary']} !important;
-        margin-bottom: 5px;
-    }}
-    .small-badge {{
-        position: absolute; top: 8px; right: 8px;
-        background: {c['badge_bg']}; color: {c['badge_text']} !important;
-        padding: 3px 8px; border-radius: 8px; font-size: 0.65rem; font-weight: bold;
+        font-weight: 500;
+        margin-bottom: 10px;
     }}
     
-    /* BUTTONS */
-    .stButton > button {{
-        width: 100%;
-        border-radius: 10px;
-        font-weight: 600;
-        color: {c['accent']} !important;
-        border: 1px solid {c['accent']};
-        background-color: transparent;
-        height: 45px; /* Taller for mobile */
-    }}
-    .stButton > button:hover {{
-        background-color: {c['accent']} !important;
-        color: white !important;
-    }}
-
-    /* CHAT */
+    /* CHAT BUBBLES */
     .chat-bubble {{
         background-color: {c['card_bg']};
-        padding: 15px; border-radius: 15px; border-bottom-left-radius: 0;
-        border-left: 4px solid {c['accent']};
+        padding: 20px; border-radius: 20px; border-bottom-left-radius: 2px;
+        border-left: 5px solid {c['accent']};
         color: {c['text_primary']} !important;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
     }}
     
-    /* POPOVER (For details) */
-    div[data-baseweb="popover"] {{
-        background-color: {c['card_bg']};
-    }}
-    
-    /* INPUTS */
+    /* SEARCH INPUT */
     input[type="text"] {{
         background-color: {c['card_bg']} !important;
         color: {c['text_primary']} !important;
-        border: 1px solid {c['card_border']} !important;
+        border: 2px solid {c['card_border']} !important;
+        border-radius: 12px;
+        padding: 10px;
+    }}
+    input[type="text"]:focus {{
+        border-color: {c['accent']} !important;
+        box-shadow: 0 0 0 3px {c['accent']}33;
     }}
 </style>
 """, unsafe_allow_html=True)
 
 # --- DATA GENERATION (200 BOOKS) ---
-# (این بخش دیتا تغییری نکرده است - همان دیتابیس قبلی)
 if 'favorites' not in st.session_state:
     st.session_state.favorites = []
 
@@ -523,11 +562,12 @@ if nav == "🏆 ۲۰۰ کتاب برتر":
                     <p class="small-author">{book['author']}</p>
                 </div>
                 <div style="margin-top:auto;">
-                   <a href="{book['search_link']}" target="_blank" style="text-decoration:none; font-size:0.7rem; color:{c['accent']};">🔎 بررسی</a>
+                   <a href="{book['search_link']}" target="_blank" style="text-decoration:none; font-size:0.75rem; color:{c['text_secondary']}; font-weight:600;">🔎 بررسی آنلاین</a>
                 </div>
             </div>
             """, unsafe_allow_html=True)
-            if st.button("➕", key=f"top_{idx}", help="افزودن به علاقه مندی", use_container_width=True):
+            # Stylish Button
+            if st.button("➕ افزودن", key=f"top_{idx}", help="افزودن به علاقه مندی", use_container_width=True):
                 add_to_favorites(book)
             st.write("") 
 
@@ -540,7 +580,9 @@ elif nav == "🔍 جستجوی جهانی":
         with col_s1:
             query = st.text_input("عنوان، نویسنده یا شابک", placeholder="مثال: Tim Winton")
         with col_s2:
-            submitted = st.form_submit_button("جستجو")
+            st.write("") # Spacer to align button
+            st.write("") 
+            submitted = st.form_submit_button("🔎 جستجو")
             
     if submitted and query:
         with st.spinner("در حال اتصال به پایگاه جهانی..."):
@@ -562,10 +604,10 @@ elif nav == "🔍 جستجوی جهانی":
                 """, unsafe_allow_html=True)
                 c_btn1, c_btn2 = st.columns(2)
                 with c_btn1:
-                    if st.button("❤️", key=f"search_{idx}", help="ذخیره", use_container_width=True):
+                    if st.button("❤️ ذخیره", key=f"search_{idx}", help="ذخیره", use_container_width=True):
                         add_to_favorites(book)
                 with c_btn2:
-                    with st.popover("📖"):
+                    with st.popover("📖 جزئیات"):
                         st.subheader(book['title'])
                         st.write(book['desc'])
                         st.markdown(f"[مشاهده در گوگل]({book['link']})")
@@ -585,7 +627,7 @@ elif nav == "❤️ علاقه‌مندی‌ها":
                 with c1:
                     st.markdown(f"**{fav['title']}** - {fav['author']}")
                 with c2:
-                    if st.button("❌", key=f"del_{fav['title']}"):
+                    if st.button("❌ حذف", key=f"del_{fav['title']}"):
                         remove_from_favorites(fav['title'])
             st.divider()
 
@@ -603,11 +645,11 @@ elif nav == "🌟 تالار مشاهیر":
             bio = st.session_state.wiki_bio
             st.markdown(f"""
             <div class="book-card" style="display:flex; gap:20px; align-items:start; flex-direction:row;">
-                <img src="{bio['image']}" style="width:120px; height:120px; object-fit:cover; border-radius:50%; border:4px solid {c['accent']}; flex-shrink:0;">
+                <img src="{bio['image']}" style="width:120px; height:120px; object-fit:cover; border-radius:50%; border:4px solid {c['accent']}; flex-shrink:0; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
                 <div>
                     <h2 style="color:{c['text_primary']}; margin-top:0;">{bio['title']}</h2>
                     <p style="color:{c['text_primary']};">{bio['summary']}</p>
-                    <a href="{bio['url']}" target="_blank" style="color:{c['accent']}">خواندن مقاله کامل</a>
+                    <a href="{bio['url']}" target="_blank" style="color:{c['accent']}; font-weight:bold;">خواندن مقاله کامل</a>
                 </div>
             </div>
             """, unsafe_allow_html=True)
