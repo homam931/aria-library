@@ -1,0 +1,6 @@
+streamlit
+pandas
+requests
+edge-tts
+gTTS
+nest_asyncio
