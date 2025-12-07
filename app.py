@@ -115,7 +115,7 @@ c = themes[st.session_state.current_theme]
 
 st.markdown(f"""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
     
     html, body, [class*="css"] {{
         font-family: 'Poppins', sans-serif;
@@ -125,116 +125,129 @@ st.markdown(f"""
     /* BACKGROUND */
     .stApp {{ background-color: {c.get('sidebar_bg', '#fff')} !important; }}
 
-    /* HEADER - 3D & BOLD */
+    /* HEADER - EXTREME 3D */
     .main-header {{
         background: {c['bg_gradient']};
-        padding: 2.5rem; border-radius: 25px; color: white; margin-bottom: 2rem;
-        box-shadow: 0 15px 40px -10px rgba(0,0,0,0.3); 
-        text-align: center; border: 2px solid rgba(255,255,255,0.1);
+        padding: 3rem; border-radius: 30px; color: white; margin-bottom: 2.5rem;
+        /* Multiple strong shadows for depth */
+        box-shadow: 0 20px 50px -10px rgba(0,0,0,0.5), inset 0 2px 5px rgba(255,255,255,0.2); 
+        text-align: center; 
+        border: 3px solid rgba(255,255,255,0.15);
     }}
-    .main-header h1 {{ font-weight: 800; text-shadow: 0 4px 6px rgba(0,0,0,0.3); font-size: 2.5rem; }}
+    .main-header h1 {{ font-weight: 800; text-shadow: 0 5px 10px rgba(0,0,0,0.4); font-size: 3rem; }}
 
     /* SIDEBAR */
     section[data-testid="stSidebar"] {{
         background-color: {c['sidebar_bg']};
-        border-right: 1px solid {c['border']};
+        border-right: 2px solid {c['border']};
+        box-shadow: 5px 0 15px rgba(0,0,0,0.05);
     }}
 
-    /* --- BOLD INPUTS & SELECTBOXES --- */
+    /* --- BOLD INPUTS (Sunken Look) --- */
     .stTextInput input, .stSelectbox div[data-baseweb="select"] {{
         background-color: {c['card_bg']} !important;
-        border: 2px solid {c['border']} !important;
-        border-radius: 12px !important;
+        border: 3px solid {c['border']} !important; /* Thicker border */
+        border-radius: 15px !important;
         color: {c['text_primary']} !important;
-        font-weight: 600;
-        box-shadow: inset 2px 2px 5px rgba(0,0,0,0.05) !important; /* Inner Shadow */
-        height: 50px;
+        font-weight: 700;
+        /* Deep inner shadow */
+        box-shadow: inset 3px 3px 8px rgba(0,0,0,0.1), inset -2px -2px 5px rgba(255,255,255,0.5) !important;
+        height: 55px;
     }}
     .stTextInput input:focus, .stSelectbox div[data-baseweb="select"]:focus-within {{
         border-color: {c['accent']} !important;
-        box-shadow: 0 0 0 3px {c['accent']}33 !important;
+        box-shadow: 0 0 0 4px {c['accent']}33, inset 2px 2px 5px rgba(0,0,0,0.1) !important;
     }}
 
     /* --- 3D RADIO BUTTONS (Voice & Menu) --- */
-    /* Container styling */
-    .stRadio > div {{ gap: 10px; }}
+    .stRadio > div {{ gap: 12px; }}
     
-    /* Unchecked State */
+    /* Unchecked State (Raised) */
     .stRadio label {{
         background-color: {c['card_bg']};
-        border: 2px solid {c['border']};
-        border-radius: 12px;
-        padding: 15px 20px;
+        border: 3px solid {c['border']};
+        border-radius: 15px;
+        padding: 18px 22px;
         color: {c['text_primary']};
-        font-weight: 600;
+        font-weight: 700;
         cursor: pointer;
-        transition: all 0.2s ease;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.05); /* Soft 3D lift */
+        transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Bouncy transition */
+        box-shadow: 0 8px 15px rgba(0,0,0,0.1), 0 3px 5px rgba(0,0,0,0.05); /* Significant lift */
         display: flex; width: 100%;
     }}
     
-    /* Checked State (Simulated) */
+    /* Checked State (Pressed/Popped) */
     .stRadio label:has(div[aria-checked="true"]) {{
         background: {c['btn_grad']} !important;
         color: white !important;
         border-color: transparent;
-        transform: translateY(-2px);
-        box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+        transform: translateY(-4px) scale(1.02); /* Higher lift */
+        box-shadow: 0 15px 35px rgba(0,0,0,0.3); /* Huge shadow */
     }}
     .stRadio label:hover {{
+        transform: translateY(-2px);
         border-color: {c['accent']};
+        box-shadow: 0 10px 20px rgba(0,0,0,0.15);
     }}
-    /* Hide default circle */
-    .stRadio div[role="radiogroup"] > label > div:first-child {{
-        display: none;
-    }}
+    .stRadio div[role="radiogroup"] > label > div:first-child {{ display: none; }}
 
-    /* --- CARDS --- */
+    /* --- CARDS (High Lift) --- */
     .book-card, .small-book-card {{
         background: {c['card_bg']};
-        border-radius: 16px;
-        padding: 15px;
-        border: 1px solid {c['border']};
-        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-        transition: all 0.3s;
+        border-radius: 20px;
+        padding: 20px;
+        border: 3px solid {c['border']};
+        /* Strong base shadow */
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         display: flex; flex-direction: column; justify-content: space-between;
         height: 100%; min-height: 250px;
     }}
     .book-card:hover, .small-book-card:hover {{
-        transform: translateY(-5px) scale(1.02);
-        box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        transform: translateY(-10px) scale(1.03);
+        /* Very strong hover shadow */
+        box-shadow: 0 25px 50px rgba(0,0,0,0.25);
         border-color: {c['accent']};
+        z-index: 10;
     }}
 
-    /* --- BUTTONS --- */
+    /* --- BUTTONS (Physical Clicky Feel) --- */
     .stButton > button {{
         background: {c['btn_grad']} !important;
         color: white !important;
-        font-weight: 700;
-        border-radius: 12px;
-        height: 50px;
+        font-weight: 800;
+        border-radius: 15px;
+        height: 55px;
         border: none;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        transition: 0.2s;
+        /* Chunky shadow + inset highlight + bottom border for thickness */
+        box-shadow: 0 8px 20px rgba(0,0,0,0.25), inset 0 2px 5px rgba(255,255,255,0.3);
+        border-bottom: 5px solid rgba(0,0,0,0.2); 
+        transition: all 0.2s;
         width: 100%;
+        letter-spacing: 0.5px;
     }}
     .stButton > button:hover {{
-        transform: translateY(-3px);
-        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        transform: translateY(-4px);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.35), inset 0 2px 5px rgba(255,255,255,0.3);
     }}
-    .stButton > button:active {{ transform: scale(0.98); }}
+    .stButton > button:active {{
+        transform: translateY(2px); /* Physical press down */
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        border-bottom-width: 2px;
+    }}
 
     /* TEXT FIXES */
-    .book-title, .small-title {{ color: {c['text_primary']} !important; font-weight: 700; margin-top: 10px; }}
-    .book-author, .small-author {{ color: {c['text_secondary']} !important; font-weight: 600; }}
+    .book-title, .small-title {{ color: {c['text_primary']} !important; font-weight: 800; margin-top: 12px; font-size: 1.05rem; }}
+    .book-author, .small-author {{ color: {c['text_secondary']} !important; font-weight: 700; }}
     p, span, div, h1, h2, h3 {{ color: {c['text_primary']}; }}
     
     /* CHAT BUBBLE */
     .chat-bubble {{
-        background: {c['card_bg']}; padding: 20px; border-radius: 20px;
-        border-left: 6px solid {c['accent']};
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        font-size: 1.1rem; font-weight: 500;
+        background: {c['card_bg']}; padding: 25px; border-radius: 25px;
+        border-left: 8px solid {c['accent']};
+        box-shadow: 5px 5px 20px rgba(0,0,0,0.15); /* Deeper shadow */
+        border: 2px solid {c['border']};
+        font-size: 1.15rem; font-weight: 600;
     }}
 </style>
 """, unsafe_allow_html=True)
