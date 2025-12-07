@@ -19,183 +19,256 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# --- THEME CONFIGURATION ---
-# Define color palettes for different themes
+# --- THEME CONFIGURATION (8 THEMES) ---
 themes = {
-    "Ocean 🌊": {
+    "Ocean 🌊 (پیش‌فرض)": {
         "bg_gradient": "linear-gradient(90deg, #264653 0%, #2a9d8f 100%)",
-        "sidebar_bg": "#f8f9fa",
+        "sidebar_bg": "#f0f8ff",
         "sidebar_text": "#264653",
         "card_bg": "#ffffff",
         "card_border": "#e0e0e0",
-        "text_primary": "#264653",
+        "text_primary": "#2c3e50",
         "text_secondary": "#e76f51",
         "accent": "#2a9d8f",
-        "badge": "#e9c46a"
+        "badge_bg": "#e9c46a",
+        "badge_text": "#264653"
     },
-    "Midnight 🌑": {
+    "Midnight 🌑 (شب)": {
         "bg_gradient": "linear-gradient(90deg, #0f2027 0%, #203a43 50%, #2c5364 100%)",
-        "sidebar_bg": "#1e1e1e",
+        "sidebar_bg": "#121212",
         "sidebar_text": "#ffffff",
-        "card_bg": "#2d2d2d",
-        "card_border": "#404040",
+        "card_bg": "#1e1e1e",
+        "card_border": "#333333",
         "text_primary": "#e0e0e0",
         "text_secondary": "#4db6ac",
         "accent": "#80cbc4",
-        "badge": "#ffca28"
+        "badge_bg": "#ffca28",
+        "badge_text": "#000000"
     },
-    "Autumn 🍂": {
-        "bg_gradient": "linear-gradient(90deg, #d35400 0%, #e67e22 100%)",
-        "sidebar_bg": "#fdf2e9",
-        "sidebar_text": "#6e2c00",
+    "Vintage 📜 (کاغذ قدیمی)": {
+        "bg_gradient": "linear-gradient(90deg, #8e44ad 0%, #c0392b 100%)", # Not visible much but sets tone
+        "main_bg_color": "#fdf6e3", # Creamy background override
+        "sidebar_bg": "#f4e4bc",
+        "sidebar_text": "#4b3621",
+        "card_bg": "#fffbf0",
+        "card_border": "#d7c08e",
+        "text_primary": "#5d4037",
+        "text_secondary": "#8d6e63",
+        "accent": "#a1887f",
+        "badge_bg": "#d7ccc8",
+        "badge_text": "#3e2723"
+    },
+    "Cyberpunk 🤖 (سایبر)": {
+        "bg_gradient": "linear-gradient(90deg, #2b003e 0%, #000000 100%)",
+        "sidebar_bg": "#0b0c15",
+        "sidebar_text": "#00f3ff",
+        "card_bg": "#1a1a2e",
+        "card_border": "#ff0099",
+        "text_primary": "#ffffff",
+        "text_secondary": "#00f3ff",
+        "accent": "#ff0099",
+        "badge_bg": "#00f3ff",
+        "badge_text": "#000000"
+    },
+    "Classic 🏛️ (کلاسیک)": {
+        "bg_gradient": "linear-gradient(90deg, #2c3e50 0%, #4ca1af 100%)",
+        "sidebar_bg": "#ffffff",
+        "sidebar_text": "#2c3e50",
         "card_bg": "#ffffff",
-        "card_border": "#edbb99",
-        "text_primary": "#873600",
-        "text_secondary": "#d35400",
-        "accent": "#e67e22",
-        "badge": "#f5b041"
+        "card_border": "#bdc3c7",
+        "text_primary": "#2c3e50",
+        "text_secondary": "#7f8c8d",
+        "accent": "#2980b9",
+        "badge_bg": "#ecf0f1",
+        "badge_text": "#2c3e50"
+    },
+    "Forest 🌲 (طبیعت)": {
+        "bg_gradient": "linear-gradient(90deg, #134e5e 0%, #71b280 100%)",
+        "sidebar_bg": "#e8f5e9",
+        "sidebar_text": "#1b5e20",
+        "card_bg": "#ffffff",
+        "card_border": "#a5d6a7",
+        "text_primary": "#2e7d32",
+        "text_secondary": "#558b2f",
+        "accent": "#2e7d32",
+        "badge_bg": "#c8e6c9",
+        "badge_text": "#1b5e20"
+    },
+    "Royal 👑 (سلطنتی)": {
+        "bg_gradient": "linear-gradient(90deg, #4b134f 0%, #c94b4b 100%)",
+        "sidebar_bg": "#f3e5f5",
+        "sidebar_text": "#4a148c",
+        "card_bg": "#ffffff",
+        "card_border": "#e1bee7",
+        "text_primary": "#4a148c",
+        "text_secondary": "#7b1fa2",
+        "accent": "#8e24aa",
+        "badge_bg": "#ffd700",
+        "badge_text": "#4a148c"
+    },
+    "Sunset 🌅 (غروب)": {
+        "bg_gradient": "linear-gradient(90deg, #ff512f 0%, #dd2476 100%)",
+        "sidebar_bg": "#fff3e0",
+        "sidebar_text": "#e65100",
+        "card_bg": "#ffffff",
+        "card_border": "#ffcc80",
+        "text_primary": "#bf360c",
+        "text_secondary": "#f57c00",
+        "accent": "#ff6f00",
+        "badge_bg": "#ffcc80",
+        "badge_text": "#bf360c"
     }
 }
 
-# Initialize Session State for Theme
+# Initialize Theme State
 if 'current_theme' not in st.session_state:
-    st.session_state.current_theme = "Ocean 🌊"
+    st.session_state.current_theme = "Ocean 🌊 (پیش‌فرض)"
 
-# --- SIDEBAR & THEME SELECTOR ---
-st.sidebar.markdown("### 🎨 Appearance")
-selected_theme_name = st.sidebar.selectbox("Choose Theme:", list(themes.keys()), index=0)
+# --- SIDEBAR UI ---
+st.sidebar.markdown("### 🎨 تنظیمات ظاهر")
+selected_theme_name = st.sidebar.selectbox("انتخاب تم:", list(themes.keys()), index=0)
 st.session_state.current_theme = selected_theme_name
-current_colors = themes[st.session_state.current_theme]
+c = themes[st.session_state.current_theme]
 
-# --- DYNAMIC CSS STYLING ---
+# --- DYNAMIC CSS ---
 st.markdown(f"""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
     
     html, body, [class*="css"] {{
         font-family: 'Poppins', sans-serif;
+        color: {c['text_primary']};
     }}
     
-    /* Main Header Gradient */
+    /* Background Override for specific themes like Vintage */
+    .stApp {{
+        background-color: {c.get('main_bg_color', '#ffffff')} !important;
+    }}
+
+    /* HEADER */
     .main-header {{
-        background: {current_colors['bg_gradient']};
-        padding: 2rem;
-        border-radius: 15px;
-        color: white;
-        margin-bottom: 2rem;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        text-align: center;
+        background: {c['bg_gradient']};
+        padding: 2rem; border-radius: 15px; color: white; margin-bottom: 2rem;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2); text-align: center;
     }}
-    
-    /* Sidebar Styling - Dynamic */
+    .main-header h1, .main-header p {{ color: white !important; }}
+
+    /* SIDEBAR styling - Mobile Friendly Touch Targets */
     section[data-testid="stSidebar"] {{
-        background-color: {current_colors['sidebar_bg']};
+        background-color: {c['sidebar_bg']};
+        border-right: 1px solid {c['card_border']};
     }}
     
-    section[data-testid="stSidebar"] .stMarkdown, 
-    section[data-testid="stSidebar"] h1, 
-    section[data-testid="stSidebar"] h2, 
-    section[data-testid="stSidebar"] h3, 
-    section[data-testid="stSidebar"] p,
-    section[data-testid="stSidebar"] span {{
-        color: {current_colors['sidebar_text']} !important;
+    /* Customizing Radio Buttons to look like Menu Items */
+    .stRadio > div {{
+        background-color: transparent;
+    }}
+    .stRadio > div > label {{
+        background-color: {c['card_bg']};
+        color: {c['text_primary']};
+        padding: 15px 10px; /* Bigger touch target */
+        margin-bottom: 8px;
+        border-radius: 10px;
+        border: 1px solid {c['card_border']};
+        transition: all 0.2s;
+        cursor: pointer;
+        font-weight: 500;
+        display: block; /* Full width */
+    }}
+    .stRadio > div > label:hover {{
+        background-color: {c['accent']}22; /* Light accent on hover */
+        border-color: {c['accent']};
+    }}
+    /* Selected Item */
+    .stRadio > div > label[data-baseweb="radio"] > div:first-child {{
+        background-color: {c['accent']} !important;
+        border-color: {c['accent']} !important;
+    }}
+
+    /* Generic Text Color Fix for Dark Mode */
+    .stMarkdown, .stText, p, h1, h2, h3, h4, h5, li, span, div {{
+        color: {c['text_primary']} !important;
     }}
     
-    /* Card Design */
+    /* CARDS */
     .small-book-card, .book-card {{
-        background: {current_colors['card_bg']};
+        background: {c['card_bg']};
         border-radius: 12px;
         padding: 12px;
         height: 100%;
         min-height: 220px;
-        border: 1px solid {current_colors['card_border']};
-        transition: transform 0.2s, box-shadow 0.2s;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        color: {current_colors['text_primary']};
+        border: 1px solid {c['card_border']};
+        transition: transform 0.2s;
+        display: flex; flex-direction: column; justify-content: space-between;
     }}
-    
     .small-book-card:hover, .book-card:hover {{
-        transform: translateY(-4px);
-        box-shadow: 0 6px 15px rgba(0,0,0,0.15);
-        border-color: {current_colors['accent']};
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        border-color: {c['accent']};
     }}
     
+    /* TEXT INSIDE CARDS (Explicitly Targeted) */
     .small-title, .book-title {{
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: {current_colors['text_primary']};
-        margin-top: 15px;
-        line-height: 1.3;
+        font-size: 0.9rem; font-weight: 700;
+        color: {c['text_primary']} !important;
+        margin-top: 10px; line-height: 1.3;
     }}
-    
     .small-author, .book-author {{
         font-size: 0.8rem;
-        color: {current_colors['text_secondary']};
-        margin-bottom: 8px;
+        color: {c['text_secondary']} !important;
+        margin-bottom: 5px;
     }}
-    
     .small-badge {{
-        position: absolute;
-        top: 8px;
-        right: 8px;
-        background: {current_colors['badge']};
-        color: #333;
-        padding: 3px 8px;
-        border-radius: 10px;
-        font-size: 0.65rem;
-        font-weight: bold;
+        position: absolute; top: 8px; right: 8px;
+        background: {c['badge_bg']}; color: {c['badge_text']} !important;
+        padding: 3px 8px; border-radius: 8px; font-size: 0.65rem; font-weight: bold;
     }}
     
-    /* Search Result Images */
-    .book-cover-img {{
+    /* BUTTONS */
+    .stButton > button {{
         width: 100%;
-        height: 180px;
-        object-fit: cover;
-        border-radius: 8px;
-        margin-bottom: 10px;
-    }}
-    
-    /* Chat Bubbles */
-    .chat-bubble {{
-        background-color: {current_colors['card_bg']};
-        border-radius: 15px;
-        border-bottom-left-radius: 0;
-        padding: 15px;
-        margin: 10px 0;
-        border-left: 5px solid {current_colors['accent']};
-        color: {current_colors['text_primary']};
-        border: 1px solid {current_colors['card_border']};
-    }}
-    
-    /* Buttons */
-    .stButton>button {{
-        border-radius: 8px;
+        border-radius: 10px;
         font-weight: 600;
-        border: 1px solid {current_colors['accent']};
+        color: {c['accent']} !important;
+        border: 1px solid {c['accent']};
+        background-color: transparent;
+        height: 45px; /* Taller for mobile */
     }}
-    .stButton>button:hover {{
-        border-color: {current_colors['text_secondary']};
-        color: {current_colors['text_secondary']};
+    .stButton > button:hover {{
+        background-color: {c['accent']} !important;
+        color: white !important;
+    }}
+
+    /* CHAT */
+    .chat-bubble {{
+        background-color: {c['card_bg']};
+        padding: 15px; border-radius: 15px; border-bottom-left-radius: 0;
+        border-left: 4px solid {c['accent']};
+        color: {c['text_primary']} !important;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     }}
     
-    /* Override Streamlit Dark Mode Default Texts */
-    p, h1, h2, h3, h4, h5, li {{
-        color: {current_colors['text_primary']};
+    /* POPOVER (For details) */
+    div[data-baseweb="popover"] {{
+        background-color: {c['card_bg']};
     }}
     
+    /* INPUTS */
+    input[type="text"] {{
+        background-color: {c['card_bg']} !important;
+        color: {c['text_primary']} !important;
+        border: 1px solid {c['card_border']} !important;
+    }}
 </style>
 """, unsafe_allow_html=True)
 
-# --- 1. DATA & STATE ---
+# --- DATA GENERATION (200 BOOKS) ---
+# (این بخش دیتا تغییری نکرده است - همان دیتابیس قبلی)
 if 'favorites' not in st.session_state:
     st.session_state.favorites = []
 
-# --- DATA GENERATION (200 BOOKS) ---
 def get_top_200_books():
     base_list = [
-        # --- Australian Classics & Modern Classics ---
         ("Cloudstreet", "Tim Winton", "Classic"), ("The Book Thief", "Markus Zusak", "Classic"),
         ("My Brilliant Career", "Miles Franklin", "Classic"), ("The Harp in the South", "Ruth Park", "Classic"),
         ("Picnic at Hanging Rock", "Joan Lindsay", "Mystery"), ("Power Without Glory", "Frank Hardy", "Classic"),
@@ -207,7 +280,6 @@ def get_top_200_books():
         ("They're a Weird Mob", "Nino Culotta", "Humor"), ("Poor Man's Orange", "Ruth Park", "Classic"),
         ("Seven Little Australians", "Ethel Turner", "Kids Classic"), ("The Magic Pudding", "Norman Lindsay", "Kids Classic"),
         ("Snugglepot and Cuddlepie", "May Gibbs", "Kids Classic"), ("Blinky Bill", "Dorothy Wall", "Kids Classic"),
-        # --- Contemporary Australian Fiction ---
         ("Boy Swallows Universe", "Trent Dalton", "Fiction"), ("Lola in the Mirror", "Trent Dalton", "Fiction"),
         ("All Our Shimmering Skies", "Trent Dalton", "Fiction"), ("Big Little Lies", "Liane Moriarty", "Thriller"),
         ("The Husband's Secret", "Liane Moriarty", "Thriller"), ("Nine Perfect Strangers", "Liane Moriarty", "Thriller"),
@@ -229,7 +301,6 @@ def get_top_200_books():
         ("The Yield", "Tara June Winch", "Fiction"), ("Bila Yarrudhanggalangdhuray", "Anita Heiss", "Historical"),
         ("Bruny", "Heather Rose", "Thriller"), ("Love & Virtue", "Diana Reid", "Fiction"),
         ("Seeing Other People", "Diana Reid", "Fiction"), ("Everyone In My Family Has Killed Someone", "Benjamin Stevenson", "Mystery"),
-        # --- Non-Fiction / Biography / History ---
         ("The Barefoot Investor", "Scott Pape", "Finance"), ("RecipeTin Eats: Dinner", "Nagi Maehashi", "Cooking"),
         ("RecipeTin Eats: Tonight", "Nagi Maehashi", "Cooking"), ("Dark Emu", "Bruce Pascoe", "History"),
         ("Sand Talk", "Tyson Yunkaporta", "Philosophy"), ("Growing Up Aboriginal in Australia", "Anita Heiss", "Anthology"),
@@ -240,7 +311,6 @@ def get_top_200_books():
         ("My Place", "Sally Morgan", "Biography"), ("Follow the Rabbit-Proof Fence", "Doris Pilkington", "Biography"),
         ("No Friend But the Mountains", "Behrouz Boochani", "Memoir"), ("Phosphorescence", "Julia Baird", "Self-Help"),
         ("The Trauma Cleaner", "Sarah Krasnostein", "Biography"), ("Woman of Substances", "Jenny Valentish", "Memoir"),
-        # --- Kids & YA ---
         ("Possum Magic", "Mem Fox", "Kids"), ("Where is the Green Sheep?", "Mem Fox", "Kids"),
         ("Ten Little Fingers and Ten Little Toes", "Mem Fox", "Kids"), ("Wombat Stew", "Marcia K. Vaughan", "Kids"),
         ("Diary of a Wombat", "Jackie French", "Kids"), ("Hitler's Daughter", "Jackie French", "Kids"),
@@ -254,7 +324,6 @@ def get_top_200_books():
         ("On the Jellicoe Road", "Melina Marchetta", "YA"), ("Tomorrow, When the War Began", "John Marsden", "YA"),
         ("The Dead of the Night", "John Marsden", "YA"), ("Obernewtyn", "Isobelle Carmody", "Fantasy"),
         ("Deltora Quest", "Emily Rodda", "Fantasy"), ("Rowan of Rin", "Emily Rodda", "Fantasy"),
-        # --- International Bestsellers Popular in Australia ---
         ("It Ends with Us", "Colleen Hoover", "Romance"), ("It Starts with Us", "Colleen Hoover", "Romance"),
         ("Verity", "Colleen Hoover", "Thriller"), ("Where the Crawdads Sing", "Delia Owens", "Fiction"),
         ("The Seven Husbands of Evelyn Hugo", "Taylor Jenkins Reid", "Fiction"), ("Daisy Jones & The Six", "Taylor Jenkins Reid", "Fiction"),
@@ -301,10 +370,8 @@ def get_top_200_books():
         ("Interpreter of Maladies", "Jhumpa Lahiri", "Fiction"), ("Homegoing", "Yaa Gyasi", "Historical"),
         ("Girl, Woman, Other", "Bernardine Evaristo", "Fiction"), ("Americanah", "Chimamanda Ngozi Adichie", "Fiction")
     ]
-    
     base_list = list(set(base_list))
     base_list.sort(key=lambda x: x[0])
-
     full_data = []
     for title, author, genre in base_list:
         full_data.append({
@@ -353,7 +420,6 @@ def search_google_books_api(query):
         response = requests.get(url, timeout=5)
         if response.status_code != 200:
             return []
-        
         data = response.json()
         books = []
         if 'items' in data:
@@ -361,7 +427,6 @@ def search_google_books_api(query):
                 v = item.get('volumeInfo', {})
                 img = v.get('imageLinks', {}).get('thumbnail', '')
                 desc = v.get('description', 'No description available.')
-                
                 book_entry = {
                     "title": v.get('title', 'Unknown Title'),
                     "author": ", ".join(v.get('authors', ['Unknown'])),
@@ -414,31 +479,31 @@ def get_audio(text, gender):
 
 # --- UI LAYOUT ---
 
-# Sidebar Navigation
-st.sidebar.markdown("### 🏛️ Library Menu")
+# Sidebar Navigation (IMPROVED for Mobile)
+st.sidebar.markdown("### 🏛️ منوی اصلی")
 nav = st.sidebar.radio("", 
-    ["🏆 Top 200 Books", "🔍 Global Search", "❤️ My Favorites", "🌟 Hall of Fame", "🗣️ Practice Chat"],
+    ["🏆 ۲۰۰ کتاب برتر", "🔍 جستجوی جهانی", "❤️ علاقه‌مندی‌ها", "🌟 تالار مشاهیر", "🗣️ تمرین گفتگو"],
     label_visibility="collapsed"
 )
 
 st.sidebar.markdown("---")
-st.sidebar.metric(label="Saved Books", value=len(st.session_state.favorites), delta=None)
+st.sidebar.metric(label="کتاب‌های ذخیره شده", value=len(st.session_state.favorites), delta=None)
 
 # Main Header
 st.markdown("""
 <div class="main-header">
     <h1>🐨 Aria Library AI Hub</h1>
-    <p>Discover Australian Literature | Interact with AI</p>
+    <p>مرکز هوشمند کتابخانه و ادبیات استرالیا</p>
 </div>
 """, unsafe_allow_html=True)
 
-# === TAB 1: TOP 200 LIST (COMPACT GRID) ===
-if nav == "🏆 Top 200 Books":
+# === TAB 1: TOP 200 LIST ===
+if nav == "🏆 ۲۰۰ کتاب برتر":
     col1, col2 = st.columns([3, 1])
     with col1:
-        st.subheader("🇦🇺 Top 200 Essential Reading")
+        st.subheader("🇦🇺 لیست خواندنی‌های ضروری")
     with col2:
-        filter_genre = st.selectbox("Filter Genre", ["All", "Fiction", "Non-Fiction", "Classic", "Kids", "YA", "Crime", "Historical"])
+        filter_genre = st.selectbox("فیلتر ژانر", ["All", "Fiction", "Non-Fiction", "Classic", "Kids", "YA", "Crime", "Historical"])
     
     display_list = st.session_state.top_books_db
     if filter_genre != "All":
@@ -458,27 +523,27 @@ if nav == "🏆 Top 200 Books":
                     <p class="small-author">{book['author']}</p>
                 </div>
                 <div style="margin-top:auto;">
-                   <a href="{book['search_link']}" target="_blank" style="text-decoration:none; font-size:0.7rem; color:{current_colors['accent']};">🔎 Verify</a>
+                   <a href="{book['search_link']}" target="_blank" style="text-decoration:none; font-size:0.7rem; color:{c['accent']};">🔎 بررسی</a>
                 </div>
             </div>
             """, unsafe_allow_html=True)
-            if st.button("➕", key=f"top_{idx}", help="Add to Favorites", use_container_width=True):
+            if st.button("➕", key=f"top_{idx}", help="افزودن به علاقه مندی", use_container_width=True):
                 add_to_favorites(book)
             st.write("") 
 
 # === TAB 2: SEARCH ===
-elif nav == "🔍 Global Search":
-    st.subheader("🌍 Global Library Catalog (Google Books)")
+elif nav == "🔍 جستجوی جهانی":
+    st.subheader("🌍 جستجو در گوگل بوکس")
     
     with st.form("search_form"):
         col_s1, col_s2 = st.columns([4, 1])
         with col_s1:
-            query = st.text_input("Title, Author, or ISBN", placeholder="e.g. Tim Winton")
+            query = st.text_input("عنوان، نویسنده یا شابک", placeholder="مثال: Tim Winton")
         with col_s2:
-            submitted = st.form_submit_button("Search")
+            submitted = st.form_submit_button("جستجو")
             
     if submitted and query:
-        with st.spinner("Connecting to global archives..."):
+        with st.spinner("در حال اتصال به پایگاه جهانی..."):
             st.session_state.search_results = search_google_books_api(query)
             
     if 'search_results' in st.session_state and st.session_state.search_results:
@@ -497,21 +562,21 @@ elif nav == "🔍 Global Search":
                 """, unsafe_allow_html=True)
                 c_btn1, c_btn2 = st.columns(2)
                 with c_btn1:
-                    if st.button("❤️", key=f"search_{idx}", help="Save", use_container_width=True):
+                    if st.button("❤️", key=f"search_{idx}", help="ذخیره", use_container_width=True):
                         add_to_favorites(book)
                 with c_btn2:
                     with st.popover("📖"):
                         st.subheader(book['title'])
                         st.write(book['desc'])
-                        st.markdown(f"[View on Google Books]({book['link']})")
+                        st.markdown(f"[مشاهده در گوگل]({book['link']})")
 
 # === TAB 3: FAVORITES ===
-elif nav == "❤️ My Favorites":
-    st.subheader("📚 My Reading List")
+elif nav == "❤️ علاقه‌مندی‌ها":
+    st.subheader("📚 لیست مطالعه من")
     if not st.session_state.favorites:
-        st.info("Your list is empty! Go to 'Top 200' or 'Search' to add books.")
+        st.info("لیست شما خالی است! از بخش جستجو یا لیست برتر کتاب اضافه کنید.")
     else:
-        if st.button("🗑️ Clear List", type="primary"):
+        if st.button("🗑️ پاک کردن همه", type="primary"):
             st.session_state.favorites = []
             st.rerun()
         for fav in st.session_state.favorites:
@@ -525,46 +590,47 @@ elif nav == "❤️ My Favorites":
             st.divider()
 
 # === TAB 4: HALL OF FAME ===
-elif nav == "🌟 Hall of Fame":
-    st.subheader("🌟 Aria's Hall of Fame")
+elif nav == "🌟 تالار مشاهیر":
+    st.subheader("🌟 چهره‌های ماندگار")
     col_sel, col_disp = st.columns([1, 2])
     with col_sel:
-        name = st.selectbox("Select Personality:", st.session_state.hall_of_fame)
-        if st.button("Load Bio", type="primary", use_container_width=True):
-            with st.spinner("Fetching..."):
+        name = st.selectbox("انتخاب شخصیت:", st.session_state.hall_of_fame)
+        if st.button("نمایش بیوگرافی", type="primary", use_container_width=True):
+            with st.spinner("در حال دریافت اطلاعات..."):
                 st.session_state.wiki_bio = get_wiki_bio(name)
     with col_disp:
         if 'wiki_bio' in st.session_state and st.session_state.wiki_bio:
             bio = st.session_state.wiki_bio
             st.markdown(f"""
             <div class="book-card" style="display:flex; gap:20px; align-items:start; flex-direction:row;">
-                <img src="{bio['image']}" style="width:120px; height:120px; object-fit:cover; border-radius:50%; border:4px solid {current_colors['accent']}; flex-shrink:0;">
+                <img src="{bio['image']}" style="width:120px; height:120px; object-fit:cover; border-radius:50%; border:4px solid {c['accent']}; flex-shrink:0;">
                 <div>
-                    <h2 style="color:{current_colors['text_primary']}; margin-top:0;">{bio['title']}</h2>
-                    <p style="color:{current_colors['text_primary']};">{bio['summary']}</p>
-                    <a href="{bio['url']}" target="_blank" style="color:{current_colors['accent']}">Read Full Article</a>
+                    <h2 style="color:{c['text_primary']}; margin-top:0;">{bio['title']}</h2>
+                    <p style="color:{c['text_primary']};">{bio['summary']}</p>
+                    <a href="{bio['url']}" target="_blank" style="color:{c['accent']}">خواندن مقاله کامل</a>
                 </div>
             </div>
             """, unsafe_allow_html=True)
 
 # === TAB 5: CHAT ===
-elif nav == "🗣️ Practice Chat":
-    st.subheader("💬 Patron Roleplay")
+elif nav == "🗣️ تمرین گفتگو":
+    st.subheader("💬 نقش‌آفرینی کتابدار")
     col_set, col_play = st.columns([1, 2])
     with col_set:
-        gender = st.radio("Voice:", ["Female", "Male"], horizontal=True)
-        if st.button("🎲 New Customer", type="primary", use_container_width=True):
+        gender = st.radio("صدای مشتری:", ["خانم", "آقا"], horizontal=True)
+        if st.button("🎲 مشتری جدید", type="primary", use_container_width=True):
             book = random.choice(st.session_state.top_books_db)
+            g_code = "Female" if gender == "خانم" else "Male"
             templates = [
                 f"Hi! Do you have '{book['title']}'? I heard it's great.",
                 f"I'm looking for '{book['title']}' by {book['author']}.",
                 f"Can you help me find the section for {book['genre']} books?"
             ]
             st.session_state.chat_text = random.choice(templates)
-            st.session_state.chat_audio_file = get_audio(st.session_state.chat_text, gender)
+            st.session_state.chat_audio_file = get_audio(st.session_state.chat_text, g_code)
             st.rerun()
     with col_play:
         if 'chat_text' in st.session_state:
-            st.markdown(f"<div class='chat-bubble'><b>Patron:</b> {st.session_state.chat_text}</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='chat-bubble'><b>مشتری:</b> {st.session_state.chat_text}</div>", unsafe_allow_html=True)
             if st.session_state.get('chat_audio_file'):
                 st.audio(st.session_state.chat_audio_file, format='audio/mp3')
