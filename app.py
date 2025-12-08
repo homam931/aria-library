@@ -159,7 +159,7 @@ st.markdown(f"""
         box-shadow: 0 6px 15px rgba(0,0,0,0.08);
         transition: all 0.3s;
         display: flex; flex-direction: column; justify-content: space-between;
-        height: 100%; min-height: 280px; /* Increased height for Date */
+        height: 100%; min-height: 280px; 
     }}
     .book-card:hover, .small-book-card:hover {{
         transform: translateY(-5px);
@@ -351,11 +351,11 @@ def remove_from_favorites(book_title):
     st.session_state.favorites = [b for b in st.session_state.favorites if b['title'] != book_title]
     st.rerun()
 
-# --- OPEN LIBRARY API (Limit 25 & Sort Newest) ---
+# --- OPEN LIBRARY API (Improved Image Fetching) ---
 @st.cache_data
 def search_open_library_api(query):
     try:
-        # Sort by Newest (API side) + Limit 25
+        # Sort by Newest & Limit 25
         url = f"https://openlibrary.org/search.json?q={query}&limit=25&sort=new"
         response = requests.get(url, timeout=10)
         
@@ -370,8 +370,17 @@ def search_open_library_api(query):
             author = item.get('author_name', ['Unknown'])[0]
             year = item.get('first_publish_year', 'N/A')
             cover_id = item.get('cover_i')
+            isbn_list = item.get('isbn', [])
             
-            img_url = f"https://covers.openlibrary.org/b/id/{cover_id}-M.jpg" if cover_id else "https://via.placeholder.com/150x220?text=No+Cover"
+            # Robust Image Strategy
+            if cover_id:
+                img_url = f"https://covers.openlibrary.org/b/id/{cover_id}-M.jpg"
+            elif isbn_list:
+                img_url = f"https://covers.openlibrary.org/b/isbn/{isbn_list[0]}-M.jpg"
+            else:
+                # Stylish Placeholder if no image found
+                img_url = "https://placehold.co/150x220/2a9d8f/FFF?text=Book"
+
             google_link = f"https://www.google.com/search?q={title}+{author}+book"
             
             book_entry = {
@@ -384,10 +393,7 @@ def search_open_library_api(query):
             }
             books.append(book_entry)
         
-        # Extra Layer: Python-side sorting to ensure recency
-        # Converts year to int (defaulting to 0 if N/A) for sorting, then reverses
         books.sort(key=lambda x: int(x['year']) if x['year'].isdigit() else 0, reverse=True)
-            
         return books
     except:
         return []
