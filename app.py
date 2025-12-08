@@ -206,77 +206,200 @@ if 'favorites' not in st.session_state:
     st.session_state.favorites = []
 
 def get_top_200_books():
-    # Simplified list for brevity in this response, ideally full 200 list from previous turn
-    # Keeping it robust
     base_list = [
         ("Cloudstreet", "Tim Winton", "Classic"), ("The Book Thief", "Markus Zusak", "Classic"),
         ("My Brilliant Career", "Miles Franklin", "Classic"), ("The Harp in the South", "Ruth Park", "Classic"),
-        ("Picnic at Hanging Rock", "Joan Lindsay", "Mystery"), ("Boy Swallows Universe", "Trent Dalton", "Fiction"), 
-        ("Big Little Lies", "Liane Moriarty", "Thriller"), ("The Dry", "Jane Harper", "Crime"),
-        ("The Barefoot Investor", "Scott Pape", "Finance"), ("Possum Magic", "Mem Fox", "Kids"),
-        ("The Secret River", "Kate Grenville", "Historical"), ("Schindler's Ark", "Thomas Keneally", "Classic"),
-        ("True History of the Kelly Gang", "Peter Carey", "Classic"), ("Dark Emu", "Bruce Pascoe", "History"),
-        ("Mao's Last Dancer", "Li Cunxin", "Biography"), ("Looking for Alibrandi", "Melina Marchetta", "YA"),
-        ("It Ends with Us", "Colleen Hoover", "Romance"), ("Where the Crawdads Sing", "Delia Owens", "Fiction"),
-        ("Atomic Habits", "James Clear", "Self-Help"), ("The Alchemist", "Paulo Coelho", "Fiction"),
-        ("1984", "George Orwell", "Classic"), ("The Great Gatsby", "F. Scott Fitzgerald", "Classic"),
-        ("Harry Potter", "J.K. Rowling", "Fantasy"), ("Tomorrow, When the War Began", "John Marsden", "YA")
+        ("Picnic at Hanging Rock", "Joan Lindsay", "Mystery"), ("Power Without Glory", "Frank Hardy", "Classic"),
+        ("The Chant of Jimmie Blacksmith", "Thomas Keneally", "Classic"), ("Schindler's Ark", "Thomas Keneally", "Classic"),
+        ("Oscar and Lucinda", "Peter Carey", "Classic"), ("True History of the Kelly Gang", "Peter Carey", "Classic"),
+        ("Jack Maggs", "Peter Carey", "Historical"), ("The Secret River", "Kate Grenville", "Historical"),
+        ("The Lieutenant", "Kate Grenville", "Historical"), ("Sarah Thornhill", "Kate Grenville", "Historical"),
+        ("The Thorn Birds", "Colleen McCullough", "Classic"), ("A Fortunate Life", "A.B. Facey", "Biography"),
+        ("They're a Weird Mob", "Nino Culotta", "Humor"), ("Poor Man's Orange", "Ruth Park", "Classic"),
+        ("Seven Little Australians", "Ethel Turner", "Kids Classic"), ("The Magic Pudding", "Norman Lindsay", "Kids Classic"),
+        ("Snugglepot and Cuddlepie", "May Gibbs", "Kids Classic"), ("Blinky Bill", "Dorothy Wall", "Kids Classic"),
+        ("Boy Swallows Universe", "Trent Dalton", "Fiction"), ("Lola in the Mirror", "Trent Dalton", "Fiction"),
+        ("All Our Shimmering Skies", "Trent Dalton", "Fiction"), ("Big Little Lies", "Liane Moriarty", "Thriller"),
+        ("The Husband's Secret", "Liane Moriarty", "Thriller"), ("Nine Perfect Strangers", "Liane Moriarty", "Thriller"),
+        ("Apples Never Fall", "Liane Moriarty", "Thriller"), ("Here One Moment", "Liane Moriarty", "New Release"),
+        ("The Dry", "Jane Harper", "Crime"), ("Force of Nature", "Jane Harper", "Crime"),
+        ("The Lost Man", "Jane Harper", "Crime"), ("The Survivors", "Jane Harper", "Crime"),
+        ("Exiles", "Jane Harper", "Crime"), ("The Slap", "Christos Tsiolkas", "Fiction"),
+        ("Barracuda", "Christos Tsiolkas", "Fiction"), ("Damascus", "Christos Tsiolkas", "Fiction"),
+        ("Breath", "Tim Winton", "Coming of Age"), ("Dirt Music", "Tim Winton", "Literary"),
+        ("The Shepherd's Hut", "Tim Winton", "Fiction"), ("Juice", "Tim Winton", "Sci-Fi"),
+        ("Shantaram", "Gregory David Roberts", "Fiction"), ("The Rosie Project", "Graeme Simsion", "Rom-Com"),
+        ("The Rosie Effect", "Graeme Simsion", "Rom-Com"), ("The Light Between Oceans", "M.L. Stedman", "Fiction"),
+        ("The Dressmaker", "Rosalie Ham", "Fiction"), ("Jasper Jones", "Craig Silvey", "YA"),
+        ("Honeybee", "Craig Silvey", "Fiction"), ("Runt", "Craig Silvey", "Kids"),
+        ("Scrublands", "Chris Hammer", "Crime"), ("Silver", "Chris Hammer", "Crime"),
+        ("Trust", "Chris Hammer", "Crime"), ("The Valley", "Chris Hammer", "Crime"),
+        ("Bodies of Light", "Jennifer Down", "Fiction"), ("Cold Enough for Snow", "Jessica Au", "Fiction"),
+        ("The White Girl", "Tony Birch", "Fiction"), ("Too Much Lip", "Melissa Lucashenko", "Fiction"),
+        ("The Yield", "Tara June Winch", "Fiction"), ("Bila Yarrudhanggalangdhuray", "Anita Heiss", "Historical"),
+        ("Bruny", "Heather Rose", "Thriller"), ("Love & Virtue", "Diana Reid", "Fiction"),
+        ("Seeing Other People", "Diana Reid", "Fiction"), ("Everyone In My Family Has Killed Someone", "Benjamin Stevenson", "Mystery"),
+        ("The Barefoot Investor", "Scott Pape", "Finance"), ("RecipeTin Eats: Dinner", "Nagi Maehashi", "Cooking"),
+        ("RecipeTin Eats: Tonight", "Nagi Maehashi", "Cooking"), ("Dark Emu", "Bruce Pascoe", "History"),
+        ("Sand Talk", "Tyson Yunkaporta", "Philosophy"), ("Growing Up Aboriginal in Australia", "Anita Heiss", "Anthology"),
+        ("Mao's Last Dancer", "Li Cunxin", "Biography"), ("The Happiest Man on Earth", "Eddie Jaku", "Biography"),
+        ("Tracks", "Robyn Davidson", "Travel"), ("Any Ordinary Day", "Leigh Sales", "Non-Fiction"),
+        ("Eggshell Skull", "Bri Lee", "Memoir"), ("Working Class Boy", "Jimmy Barnes", "Memoir"),
+        ("Working Class Man", "Jimmy Barnes", "Memoir"), ("Reckoning", "Magda Szubanski", "Memoir"),
+        ("My Place", "Sally Morgan", "Biography"), ("Follow the Rabbit-Proof Fence", "Doris Pilkington", "Biography"),
+        ("No Friend But the Mountains", "Behrouz Boochani", "Memoir"), ("Phosphorescence", "Julia Baird", "Self-Help"),
+        ("The Trauma Cleaner", "Sarah Krasnostein", "Biography"), ("Woman of Substances", "Jenny Valentish", "Memoir"),
+        ("Possum Magic", "Mem Fox", "Kids"), ("Where is the Green Sheep?", "Mem Fox", "Kids"),
+        ("Ten Little Fingers and Ten Little Toes", "Mem Fox", "Kids"), ("Wombat Stew", "Marcia K. Vaughan", "Kids"),
+        ("Diary of a Wombat", "Jackie French", "Kids"), ("Hitler's Daughter", "Jackie French", "Kids"),
+        ("Magic Beach", "Alison Lester", "Kids"), ("Are We There Yet?", "Alison Lester", "Kids"),
+        ("Animalia", "Graeme Base", "Kids"), ("The 13-Storey Treehouse", "Andy Griffiths", "Kids"),
+        ("The 26-Storey Treehouse", "Andy Griffiths", "Kids"), ("The 169-Storey Treehouse", "Andy Griffiths", "Kids"),
+        ("The Bad Guys", "Aaron Blabey", "Kids"), ("Pig the Pug", "Aaron Blabey", "Kids"),
+        ("WeirDo", "Anh Do", "Kids"), ("Wolf Girl", "Anh Do", "Kids"),
+        ("Bluey: The Beach", "Ludo Studio", "Kids"), ("Bluey: Goodnight Fruit Bat", "Ludo Studio", "Kids"),
+        ("Looking for Alibrandi", "Melina Marchetta", "YA"), ("Saving Francesca", "Melina Marchetta", "YA"),
+        ("On the Jellicoe Road", "Melina Marchetta", "YA"), ("Tomorrow, When the War Began", "John Marsden", "YA"),
+        ("The Dead of the Night", "John Marsden", "YA"), ("Obernewtyn", "Isobelle Carmody", "Fantasy"),
+        ("Deltora Quest", "Emily Rodda", "Fantasy"), ("Rowan of Rin", "Emily Rodda", "Fantasy"),
+        ("It Ends with Us", "Colleen Hoover", "Romance"), ("It Starts with Us", "Colleen Hoover", "Romance"),
+        ("Verity", "Colleen Hoover", "Thriller"), ("Where the Crawdads Sing", "Delia Owens", "Fiction"),
+        ("The Seven Husbands of Evelyn Hugo", "Taylor Jenkins Reid", "Fiction"), ("Daisy Jones & The Six", "Taylor Jenkins Reid", "Fiction"),
+        ("Lessons in Chemistry", "Bonnie Garmus", "Fiction"), ("The Thursday Murder Club", "Richard Osman", "Mystery"),
+        ("The Man Who Died Twice", "Richard Osman", "Mystery"), ("Normal People", "Sally Rooney", "Fiction"),
+        ("Conversations with Friends", "Sally Rooney", "Fiction"), ("Beautiful World, Where Are You", "Sally Rooney", "Fiction"),
+        ("A Court of Thorns and Roses", "Sarah J. Maas", "Fantasy"), ("Throne of Glass", "Sarah J. Maas", "Fantasy"),
+        ("Fourth Wing", "Rebecca Yarros", "Fantasy"), ("Iron Flame", "Rebecca Yarros", "Fantasy"),
+        ("Atomic Habits", "James Clear", "Self-Help"), ("Sapiens", "Yuval Noah Harari", "History"),
+        ("Becoming", "Michelle Obama", "Biography"), ("Spare", "Prince Harry", "Biography"),
+        ("The Da Vinci Code", "Dan Brown", "Thriller"), ("Harry Potter and the Philosopher's Stone", "J.K. Rowling", "Fantasy"),
+        ("The Hunger Games", "Suzanne Collins", "YA"), ("Twilight", "Stephenie Meyer", "YA"),
+        ("The Alchemist", "Paulo Coelho", "Fiction"), ("1984", "George Orwell", "Classic"),
+        ("To Kill a Mockingbird", "Harper Lee", "Classic"), ("Pride and Prejudice", "Jane Austen", "Classic"),
+        ("The Great Gatsby", "F. Scott Fitzgerald", "Classic"), ("The Catcher in the Rye", "J.D. Salinger", "Classic"),
+        ("Lord of the Flies", "William Golding", "Classic"), ("Little Women", "Louisa May Alcott", "Classic"),
+        ("Dune", "Frank Herbert", "Sci-Fi"), ("The Hobbit", "J.R.R. Tolkien", "Fantasy"),
+        ("A Game of Thrones", "George R.R. Martin", "Fantasy"), ("The Handmaid's Tale", "Margaret Atwood", "Dystopian"),
+        ("The Testaments", "Margaret Atwood", "Dystopian"), ("Klara and the Sun", "Kazuo Ishiguro", "Fiction"),
+        ("Never Let Me Go", "Kazuo Ishiguro", "Fiction"), ("Norwegian Wood", "Haruki Murakami", "Fiction"),
+        ("Kafka on the Shore", "Haruki Murakami", "Fiction"), ("1Q84", "Haruki Murakami", "Fiction"),
+        ("Before the Coffee Gets Cold", "Toshikazu Kawaguchi", "Fiction"), ("Yellowface", "R.F. Kuang", "Satire"),
+        ("Babel", "R.F. Kuang", "Fantasy"), ("Tomorrow, and Tomorrow, and Tomorrow", "Gabrielle Zevin", "Fiction"),
+        ("Demon Copperhead", "Barbara Kingsolver", "Fiction"), ("Trust", "Hernan Diaz", "Fiction"),
+        ("The Midnight Library", "Matt Haig", "Fiction"), ("Eleanor Oliphant is Completely Fine", "Gail Honeyman", "Fiction"),
+        ("Gone Girl", "Gillian Flynn", "Thriller"), ("The Girl on the Train", "Paula Hawkins", "Thriller"),
+        ("Bridgerton: The Duke and I", "Julia Quinn", "Romance"), ("Outlander", "Diana Gabaldon", "Historical"),
+        ("The Tattooist of Auschwitz", "Heather Morris", "Historical"), ("Cilka's Journey", "Heather Morris", "Historical"),
+        ("Thinking, Fast and Slow", "Daniel Kahneman", "Psychology"), ("Educated", "Tara Westover", "Memoir"),
+        ("Born a Crime", "Trevor Noah", "Memoir"), ("Greenlights", "Matthew McConaughey", "Memoir"),
+        ("The Body Keeps the Score", "Bessel van der Kolk", "Psychology"), ("Why We Sleep", "Matthew Walker", "Health"),
+        ("Breath", "James Nestor", "Health"), ("I'm Glad My Mom Died", "Jennette McCurdy", "Memoir"),
+        ("Friends, Lovers, and the Big Terrible Thing", "Matthew Perry", "Memoir"), ("Elon Musk", "Walter Isaacson", "Biography"),
+        ("Steve Jobs", "Walter Isaacson", "Biography"), ("Project Hail Mary", "Andy Weir", "Sci-Fi"),
+        ("The Martian", "Andy Weir", "Sci-Fi"), ("Dark Matter", "Blake Crouch", "Sci-Fi"),
+        ("Ready Player One", "Ernest Cline", "Sci-Fi"), ("Ender's Game", "Orson Scott Card", "Sci-Fi"),
+        ("Foundation", "Isaac Asimov", "Sci-Fi"), ("Fahrenheit 451", "Ray Bradbury", "Classic"),
+        ("Brave New World", "Aldous Huxley", "Classic"), ("Animal Farm", "George Orwell", "Classic"),
+        ("The Giver", "Lois Lowry", "YA"), ("The Fault in Our Stars", "John Green", "YA"),
+        ("Paper Towns", "John Green", "YA"), ("Wonder", "R.J. Palacio", "Kids"),
+        ("The Boy in the Striped Pyjamas", "John Boyne", "Historical"), ("Life of Pi", "Yann Martel", "Fiction"),
+        ("The Kite Runner", "Khaled Hosseini", "Fiction"), ("A Thousand Splendid Suns", "Khaled Hosseini", "Fiction"),
+        ("The God of Small Things", "Arundhati Roy", "Fiction"), ("Midnight's Children", "Salman Rushdie", "Fiction"),
+        ("Interpreter of Maladies", "Jhumpa Lahiri", "Fiction"), ("Homegoing", "Yaa Gyasi", "Historical"),
+        ("Girl, Woman, Other", "Bernardine Evaristo", "Fiction"), ("Americanah", "Chimamanda Ngozi Adichie", "Fiction")
     ]
-    # In a real scenario, include the full 200 items here.
-    # Duplicating list to ensure UI feels full for this demo if needed, but logic supports 200.
-    
+    base_list = list(set(base_list))
+    base_list.sort(key=lambda x: x[0])
     full_data = []
-    for i in range(5): # Just to fill grid for demo if list is short
-        for title, author, genre in base_list:
-            full_data.append({
-                "title": title, "author": author, "genre": genre,
-                "search_link": f"https://www.google.com/search?q={title}+{author}+book"
-            })
+    for title, author, genre in base_list:
+        full_data.append({
+            "title": title, "author": author, "genre": genre,
+            "search_link": f"https://www.google.com/search?q={title}+{author}+book"
+        })
     return full_data
 
 if 'top_books_db' not in st.session_state:
     st.session_state.top_books_db = get_top_200_books()
 
-# --- 2. CATEGORIZED HALL OF FAME ---
+# --- 2. EXPANDED HALL OF FAME DATA ---
 def get_hall_of_fame_data():
     return {
         "Writers & Poets ✍️": [
             "Tim Winton", "Patrick White", "Banjo Paterson", "Henry Lawson", 
             "Miles Franklin", "Oodgeroo Noonuccal", "Judith Wright", "Les Murray", 
-            "Peter Carey", "Helen Garner", "Liane Moriarty", "Markus Zusak"
+            "Peter Carey", "Helen Garner", "Liane Moriarty", "Markus Zusak", 
+            "Christos Tsiolkas", "Kate Grenville", "Richard Flanagan", "Bryce Courtenay",
+            "Thomas Keneally", "Colleen McCullough", "Germaine Greer", "Dorothea Mackellar",
+            "Kenneth Slessor", "Gwen Harwood", "David Malouf", "Alexis Wright", "Trent Dalton"
         ],
-        "Politicians & Leaders 🏛️": [
-            "Sir Henry Parkes", "Edmund Barton", "John Curtin", "Robert Menzies", 
-            "Gough Whitlam", "Bob Hawke", "Paul Keating", "Julia Gillard", 
-            "Kevin Rudd", "John Howard", "Edith Cowan"
+        "Prime Ministers & Politicians 🏛️": [
+            "Sir Edmund Barton", "Alfred Deakin", "Andrew Fisher", "Billy Hughes",
+            "John Curtin", "Ben Chifley", "Robert Menzies", "Harold Holt", 
+            "Gough Whitlam", "Malcolm Fraser", "Bob Hawke", "Paul Keating", 
+            "John Howard", "Kevin Rudd", "Julia Gillard", "Tony Abbott", 
+            "Malcolm Turnbull", "Scott Morrison", "Anthony Albanese", "Edith Cowan", "Neville Bonner"
         ],
         "Activists & Indigenous Leaders ✊": [
-            "Eddie Mabo", "Vincent Lingiari", "Neville Bonner", "Charles Perkins", 
-            "Lowitja O'Donoghue", "Faith Bandler", "William Cooper", "Truganini", "Bennelong"
+            "Eddie Mabo", "Vincent Lingiari", "Charles Perkins", "Lowitja O'Donoghue", 
+            "Faith Bandler", "William Cooper", "Truganini", "Bennelong", "Pemulwuy",
+            "Doug Nicholls", "Adam Goodes", "Grace Tame", "Bob Brown"
         ],
-        "Icons & Athletes 🌟": [
-            "Steve Irwin", "Sir Donald Bradman", "Cathy Freeman", "Dawn Fraser", 
-            "Rod Laver", "Ian Thorpe", "Ash Barty", "Ned Kelly", "Dame Edna Everage"
+        "Scientists & Innovators 🔬": [
+            "Howard Florey", "Elizabeth Blackburn", "Peter Doherty", "Barry Marshall", 
+            "Robin Warren", "Fiona Wood", "Fred Hollows", "Victor Chang", 
+            "Douglas Mawson", "David Unaipon", "Karl Kruszelnicki"
+        ],
+        "Arts, Music & Entertainment 🎭": [
+            "Cate Blanchett", "Nicole Kidman", "Hugh Jackman", "Heath Ledger", 
+            "Margot Robbie", "Kylie Minogue", "Nick Cave", "Sia", "AC/DC", 
+            "INXS", "Cold Chisel", "Paul Hogan", "Baz Luhrmann", "George Miller",
+            "Dame Edna Everage", "Steve Irwin", "Crocodile Dundee"
+        ],
+        "Sports Legends 🏆": [
+            "Sir Donald Bradman", "Cathy Freeman", "Dawn Fraser", "Rod Laver", 
+            "Margaret Court", "Ian Thorpe", "Shane Warne", "Ricky Ponting", 
+            "Ash Barty", "Sam Kerr", "Greg Norman", "Cadel Evans"
         ]
     }
 
-# --- 3. AUSTRALIAN HISTORY DATA ---
+# --- 3. COMPREHENSIVE HISTORY TIMELINE ---
 def get_history_timeline():
     return [
         {"year": "65,000+ Years Ago", "title": "Indigenous Stewardship", "desc": "Aboriginal and Torres Strait Islander peoples live on the continent, establishing the world's oldest continuous living culture.", "link": "https://en.wikipedia.org/wiki/History_of_Indigenous_Australians"},
-        {"year": "1606", "title": "First European Landing", "desc": "Dutch navigator Willem Janszoon lands on the western side of the Cape York Peninsula.", "link": "https://en.wikipedia.org/wiki/Willem_Janszoon"},
-        {"year": "1770", "title": "Captain Cook's Arrival", "desc": "James Cook claims the East Coast for Britain, naming it New South Wales.", "link": "https://en.wikipedia.org/wiki/James_Cook"},
-        {"year": "1788", "title": "First Fleet & Colonisation", "desc": "The First Fleet arrives at Sydney Cove, establishing the first penal colony.", "link": "https://en.wikipedia.org/wiki/First_Fleet"},
-        {"year": "1851", "title": "Gold Rush Begins", "desc": "Gold is discovered in NSW and Victoria, leading to massive immigration and economic boom.", "link": "https://en.wikipedia.org/wiki/Australian_gold_rushes"},
-        {"year": "1854", "title": "Eureka Stockade", "desc": "Miners rebel against colonial authority in Ballarat, a key event for Australian democracy.", "link": "https://en.wikipedia.org/wiki/Eureka_Rebellion"},
-        {"year": "1901", "title": "Federation", "desc": "The six colonies federate to form the Commonwealth of Australia.", "link": "https://en.wikipedia.org/wiki/Federation_of_Australia"},
-        {"year": "1915", "title": "Gallipoli Campaign", "desc": "ANZAC troops land at Gallipoli during WWI, defining national identity.", "link": "https://en.wikipedia.org/wiki/Gallipoli_campaign"},
-        {"year": "1967", "title": "1967 Referendum", "desc": "Australians vote overwhelmingly to count Indigenous people in the census and allow federal laws for them.", "link": "https://en.wikipedia.org/wiki/1967_Australian_referendum"},
-        {"year": "1975", "title": "The Dismissal", "desc": "Prime Minister Gough Whitlam is dismissed by the Governor-General, a constitutional crisis.", "link": "https://en.wikipedia.org/wiki/1975_Australian_constitutional_crisis"},
-        {"year": "1992", "title": "Mabo Decision", "desc": "The High Court overturns 'Terra Nullius', recognising Native Title.", "link": "https://en.wikipedia.org/wiki/Mabo_v_Queensland_(No_2)"},
-        {"year": "2000", "title": "Sydney Olympics", "desc": "Sydney hosts the Summer Olympics, famously called the 'best games ever'.", "link": "https://en.wikipedia.org/wiki/2000_Summer_Olympics"},
-        {"year": "2008", "title": "The Apology", "desc": "PM Kevin Rudd formally apologises to the Stolen Generations.", "link": "https://en.wikipedia.org/wiki/Apology_to_Australia%27s_Indigenous_peoples"},
-        {"year": "2010", "title": "First Female PM", "desc": "Julia Gillard becomes Australia's first female Prime Minister.", "link": "https://en.wikipedia.org/wiki/Julia_Gillard"}
+        {"year": "1606", "title": "European Discovery", "desc": "Dutch navigator Willem Janszoon lands on the western side of Cape York. It is the first recorded European landing.", "link": "https://en.wikipedia.org/wiki/Willem_Janszoon"},
+        {"year": "1770", "title": "Cook Claims the East Coast", "desc": "James Cook maps the East Coast and claims it for Britain at Possession Island, naming it New South Wales.", "link": "https://en.wikipedia.org/wiki/James_Cook"},
+        {"year": "1788", "title": "Foundation of New South Wales", "desc": "The First Fleet arrives at Sydney Cove. Captain Arthur Phillip establishes the penal colony of NSW.", "link": "https://en.wikipedia.org/wiki/History_of_New_South_Wales"},
+        {"year": "1803", "title": "Settlement of Tasmania", "desc": "British settlement begins in Van Diemen's Land (Tasmania) to prevent French claims.", "link": "https://en.wikipedia.org/wiki/History_of_Tasmania"},
+        {"year": "1824", "title": "Settlement of Queensland", "desc": "A penal colony is established at Moreton Bay (Brisbane), beginning the colonization of Queensland.", "link": "https://en.wikipedia.org/wiki/History_of_Queensland"},
+        {"year": "1829", "title": "Foundation of Western Australia", "desc": "The Swan River Colony (Perth) is founded as a free settlement, establishing Western Australia.", "link": "https://en.wikipedia.org/wiki/History_of_Western_Australia"},
+        {"year": "1835", "title": "Foundation of Victoria", "desc": "John Batman signs a treaty (later voided) to settle Port Phillip District (Melbourne).", "link": "https://en.wikipedia.org/wiki/History_of_Victoria"},
+        {"year": "1836", "title": "Foundation of South Australia", "desc": "South Australia is proclaimed as a free province (no convicts) at Glenelg, Adelaide.", "link": "https://en.wikipedia.org/wiki/History_of_South_Australia"},
+        {"year": "1851", "title": "Separation of Victoria", "desc": "Victoria separates from NSW to become an independent colony. The Gold Rush begins.", "link": "https://en.wikipedia.org/wiki/Separation_of_Queensland"},
+        {"year": "1854", "title": "Eureka Stockade", "desc": "Miners in Ballarat rebel against license fees. A key event for Australian democracy.", "link": "https://en.wikipedia.org/wiki/Eureka_Rebellion"},
+        {"year": "1856", "title": "Secret Ballot Introduced", "desc": "South Australia and Victoria pioneer the 'Secret Ballot' system, influencing democracy worldwide.", "link": "https://en.wikipedia.org/wiki/Secret_ballot#Australia"},
+        {"year": "1859", "title": "Separation of Queensland", "desc": "Queensland separates from NSW to become an independent colony.", "link": "https://en.wikipedia.org/wiki/History_of_Queensland"},
+        {"year": "1890s", "title": "The Depression & Labor Movement", "desc": "Economic depression strikes. The Australian Labor Party is formed, one of the world's oldest labor parties.", "link": "https://en.wikipedia.org/wiki/Australian_Labor_Party"},
+        {"year": "1901", "title": "Federation of Australia", "desc": "The six colonies unite to form the Commonwealth of Australia. Edmund Barton becomes the first PM.", "link": "https://en.wikipedia.org/wiki/Federation_of_Australia"},
+        {"year": "1902", "title": "Women's Suffrage", "desc": "The Commonwealth Franchise Act gives women the right to vote and stand for federal parliament.", "link": "https://en.wikipedia.org/wiki/Women%27s_suffrage_in_Australia"},
+        {"year": "1915", "title": "Gallipoli Campaign", "desc": "ANZAC troops land at Gallipoli. The event defines national identity and mateship.", "link": "https://en.wikipedia.org/wiki/Gallipoli_campaign"},
+        {"year": "1924", "title": "Compulsory Voting", "desc": "Voting becomes compulsory in federal elections to ensure full participation.", "link": "https://en.wikipedia.org/wiki/Electoral_system_of_Australia#Compulsory_voting"},
+        {"year": "1927", "title": "Canberra becomes Capital", "desc": "Parliament House opens in Canberra, replacing Melbourne as the temporary seat of government.", "link": "https://en.wikipedia.org/wiki/History_of_Canberra"},
+        {"year": "1942", "title": "Statute of Westminster", "desc": "Australia formally adopts independence from British legislation (retroactive to 1939).", "link": "https://en.wikipedia.org/wiki/Statute_of_Westminster_Adoption_Act_1942"},
+        {"year": "1949", "title": "Liberal Party Era Begins", "desc": "Robert Menzies wins the election, starting the longest prime ministership in Australian history.", "link": "https://en.wikipedia.org/wiki/Robert_Menzies"},
+        {"year": "1962", "title": "Indigenous Federal Vote", "desc": "Aboriginal people are granted the right to vote in federal elections.", "link": "https://en.wikipedia.org/wiki/Commonwealth_Electoral_Act_1962"},
+        {"year": "1966", "title": "End of White Australia Policy", "desc": "Harold Holt begins dismantling the White Australia Policy, opening migration to non-Europeans.", "link": "https://en.wikipedia.org/wiki/White_Australia_policy"},
+        {"year": "1967", "title": "1967 Referendum", "desc": "Over 90% of Australians vote to count Indigenous people in the census and allow federal laws for them.", "link": "https://en.wikipedia.org/wiki/1967_Australian_referendum"},
+        {"year": "1972", "title": "It's Time", "desc": "Gough Whitlam wins election, ending 23 years of Liberal rule and introducing free university and universal healthcare.", "link": "https://en.wikipedia.org/wiki/Gough_Whitlam"},
+        {"year": "1975", "title": "The Dismissal", "desc": "PM Gough Whitlam is controversially dismissed by Governor-General John Kerr.", "link": "https://en.wikipedia.org/wiki/1975_Australian_constitutional_crisis"},
+        {"year": "1986", "title": "Australia Acts", "desc": "The Australia Acts sever all remaining legal ties to the UK courts and government.", "link": "https://en.wikipedia.org/wiki/Australia_Act_1986"},
+        {"year": "1992", "title": "Mabo Decision", "desc": "The High Court overturns 'Terra Nullius', recognizing Native Title for Indigenous people.", "link": "https://en.wikipedia.org/wiki/Mabo_v_Queensland_(No_2)"},
+        {"year": "1996", "title": "Port Arthur Massacre", "desc": "A tragedy leads PM John Howard to introduce strict national gun control laws.", "link": "https://en.wikipedia.org/wiki/Port_Arthur_massacre_(Australia)"},
+        {"year": "1999", "title": "Republic Referendum", "desc": "Australians vote to keep the Monarch as head of state rather than becoming a Republic.", "link": "https://en.wikipedia.org/wiki/1999_Australian_republic_referendum"},
+        {"year": "2000", "title": "Sydney Olympics", "desc": "Sydney hosts the Summer Olympics, celebrating Australian culture and sport.", "link": "https://en.wikipedia.org/wiki/2000_Summer_Olympics"},
+        {"year": "2008", "title": "The Apology", "desc": "PM Kevin Rudd formally apologises to the Stolen Generations on behalf of the parliament.", "link": "https://en.wikipedia.org/wiki/Apology_to_Australia%27s_Indigenous_peoples"},
+        {"year": "2010", "title": "First Female PM", "desc": "Julia Gillard becomes Australia's first female Prime Minister.", "link": "https://en.wikipedia.org/wiki/Julia_Gillard"},
+        {"year": "2017", "title": "Marriage Equality", "desc": "Same-sex marriage is legalized following a national postal survey.", "link": "https://en.wikipedia.org/wiki/Australian_Marriage_Law_Postal_Survey"},
+        {"year": "2023", "title": "The Voice Referendum", "desc": "A referendum to establish an Indigenous Voice to Parliament is held but rejected.", "link": "https://en.wikipedia.org/wiki/2023_Australian_Indigenous_Voice_referendum"}
     ]
 
 # --- BACKEND FUNCTIONS ---
@@ -291,10 +414,11 @@ def remove_from_favorites(book_title):
     st.session_state.favorites = [b for b in st.session_state.favorites if b['title'] != book_title]
     st.rerun()
 
-# --- OPEN LIBRARY API ---
+# --- OPEN LIBRARY API (Improved Image Fetching) ---
 @st.cache_data
 def search_open_library_api(query):
     try:
+        # Sort by Newest & Limit 25
         url = f"https://openlibrary.org/search.json?q={query}&limit=25&sort=new"
         response = requests.get(url, timeout=10)
         
@@ -311,6 +435,7 @@ def search_open_library_api(query):
             cover_id = item.get('cover_i')
             isbn_list = item.get('isbn', [])
             
+            # Robust Image Strategy
             if cover_id:
                 img_url = f"https://covers.openlibrary.org/b/id/{cover_id}-M.jpg"
             elif isbn_list:
@@ -351,8 +476,9 @@ def get_wiki_bio(name):
         return None
     return None
 
-# --- AUDIO SYSTEM ---
+# --- AUDIO SYSTEM (AUTO) ---
 async def edge_tts_save(text, filename):
+    # Standard Female Voice
     voice = "en-AU-NatashaNeural" 
     communicate = edge_tts.Communicate(text, voice)
     await communicate.save(filename)
@@ -388,7 +514,7 @@ st.sidebar.metric(label="Saved Books", value=len(st.session_state.favorites), de
 st.markdown("""
 <div class="main-header">
     <h1>🐨 Aria Library AI Hub</h1>
-    <p>Discover Australian Literature, History & Culture</p>
+    <p>Discover Australian Literature | Interact with AI</p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -497,7 +623,7 @@ elif nav == "🌟 Hall of Fame":
     # 1. Category Selection
     category = st.selectbox("Select Category:", list(hof_data.keys()))
     
-    # 2. Person Selection (Based on Category)
+    # 2. Person Selection
     col_sel, col_disp = st.columns([1, 2])
     with col_sel:
         name = st.selectbox("Select Person:", hof_data[category])
@@ -514,7 +640,7 @@ elif nav == "🌟 Hall of Fame":
                 <div>
                     <h2 style="color:{c['text_primary']}; margin-top:0;">{bio['title']}</h2>
                     <p style="color:{c['text_primary']};">{bio['summary']}</p>
-                    <a href="{bio['url']}" target="_blank" style="color:{c['accent']}; font-weight:bold;">Read Full Article on Wikipedia</a>
+                    <a href="{bio['url']}" target="_blank" style="color:{c['accent']}; font-weight:bold;">Read Full Article</a>
                 </div>
             </div>
             """, unsafe_allow_html=True)
@@ -524,17 +650,27 @@ elif nav == "🌟 Hall of Fame":
 # === TAB 5: HISTORY ===
 elif nav == "📜 Australian History":
     st.subheader("📜 Timeline of Australia")
-    st.caption("Key events from ancient times to the modern era.")
+    st.caption("From ancient times to modern statehood and elections.")
     
     timeline_data = get_history_timeline()
     
     for event in timeline_data:
+        # Subtle color coding for centuries
+        year_val = event['year'][:4]
+        border_color = c['accent']
+        if "17" in year_val: border_color = "#e76f51"
+        elif "18" in year_val: border_color = "#f4a261"
+        elif "19" in year_val: border_color = "#2a9d8f"
+        elif "20" in year_val: border_color = "#264653"
+
         st.markdown(f"""
-        <div class="book-card" style="margin-bottom: 20px; border-left: 10px solid {c['accent']};">
-            <h2 class="history-year">{event['year']}</h2>
-            <h3 style="margin-top:0; color:{c['text_primary']};">{event['title']}</h3>
-            <p style="color:{c['text_primary']}; opacity:0.8;">{event['desc']}</p>
-            <a href="{event['link']}" target="_blank" style="text-decoration:none; color:{c['accent']}; font-weight:bold;">🔗 Read More</a>
+        <div class="book-card" style="margin-bottom: 20px; border-left: 8px solid {border_color}; min-height: auto;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h2 class="history-year" style="color:{border_color} !important; margin:0;">{event['year']}</h2>
+                <a href="{event['link']}" target="_blank" style="text-decoration:none; color:{border_color}; font-size:0.8rem;">Read More 🔗</a>
+            </div>
+            <h3 style="margin-top:5px; color:{c['text_primary']}; font-size:1.1rem;">{event['title']}</h3>
+            <p style="color:{c['text_primary']}; opacity:0.85; font-size:0.95rem; margin-bottom:0;">{event['desc']}</p>
         </div>
         """, unsafe_allow_html=True)
 
