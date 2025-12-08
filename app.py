@@ -159,7 +159,7 @@ st.markdown(f"""
         box-shadow: 0 6px 15px rgba(0,0,0,0.08);
         transition: all 0.3s;
         display: flex; flex-direction: column; justify-content: space-between;
-        height: 100%; min-height: 250px;
+        height: 100%; min-height: 280px; /* Increased height for Date */
     }}
     .book-card:hover, .small-book-card:hover {{
         transform: translateY(-5px);
@@ -187,6 +187,7 @@ st.markdown(f"""
     /* TEXT FIXES */
     .book-title, .small-title {{ color: {c['text_primary']} !important; font-weight: 700; margin-top: 10px; font-size: 1rem; }}
     .book-author, .small-author {{ color: {c['text_secondary']} !important; font-weight: 600; font-size: 0.85rem; }}
+    .book-year {{ color: {c['text_primary']} !important; opacity: 0.7; font-size: 0.8rem; margin-top: 2px; }}
     p, span, div, h1, h2, h3 {{ color: {c['text_primary']}; }}
     
     /* CHAT BUBBLE */
@@ -350,12 +351,12 @@ def remove_from_favorites(book_title):
     st.session_state.favorites = [b for b in st.session_state.favorites if b['title'] != book_title]
     st.rerun()
 
-# --- SWITCHED TO OPEN LIBRARY API (To fix blocking issues) ---
+# --- OPEN LIBRARY API (Limit 25 & Sort Newest) ---
 @st.cache_data
 def search_open_library_api(query):
     try:
-        # Open Library Search API
-        url = f"https://openlibrary.org/search.json?q={query}&limit=12"
+        # Sort by Newest (API side) + Limit 25
+        url = f"https://openlibrary.org/search.json?q={query}&limit=25&sort=new"
         response = requests.get(url, timeout=10)
         
         if response.status_code != 200:
@@ -365,27 +366,27 @@ def search_open_library_api(query):
         books = []
         
         for item in data.get('docs', []):
-            # Extract data safely
             title = item.get('title', 'Unknown')
             author = item.get('author_name', ['Unknown'])[0]
             year = item.get('first_publish_year', 'N/A')
             cover_id = item.get('cover_i')
             
-            # Construct Image URL
             img_url = f"https://covers.openlibrary.org/b/id/{cover_id}-M.jpg" if cover_id else "https://via.placeholder.com/150x220?text=No+Cover"
-            
-            # Construct Google Search Link for details
             google_link = f"https://www.google.com/search?q={title}+{author}+book"
             
             book_entry = {
                 "title": title,
                 "author": author,
                 "year": str(year),
-                "desc": "Details available on search.", # Open Library search doesn't return desc
+                "desc": "Details available on search.", 
                 "image": img_url,
                 "link": google_link
             }
             books.append(book_entry)
+        
+        # Extra Layer: Python-side sorting to ensure recency
+        # Converts year to int (defaulting to 0 if N/A) for sorting, then reverses
+        books.sort(key=lambda x: int(x['year']) if x['year'].isdigit() else 0, reverse=True)
             
         return books
     except:
@@ -407,9 +408,9 @@ def get_wiki_bio(name):
         return None
     return None
 
-# --- AUDIO SYSTEM (AUTO VOICE) ---
+# --- AUDIO SYSTEM (AUTO) ---
 async def edge_tts_save(text, filename):
-    # Fixed High-Quality Female Voice (Mobile Friendly)
+    # Standard Female Voice
     voice = "en-AU-NatashaNeural" 
     communicate = edge_tts.Communicate(text, voice)
     await communicate.save(filename)
@@ -486,7 +487,7 @@ if nav == "🏆 Top 200 Books":
 # === TAB 2: SEARCH ===
 elif nav == "🔍 Global Search":
     st.subheader("🌍 Open Library Search")
-    st.caption("Powered by Open Library API. (No blocking, 100% Reliable)")
+    st.caption("Showing 25 newest results (Powered by Open Library).")
     
     with st.form("search_form"):
         col_s1, col_s2 = st.columns([4, 1])
@@ -512,6 +513,7 @@ elif nav == "🔍 Global Search":
                         <img src="{cover_img}" style="width:100%; height:200px; object-fit:cover; border-radius:10px;">
                         <h5 class="book-title">{book['title'][:50]}...</h5>
                         <p class="book-author">{book['author'][:30]}</p>
+                        <p class="book-year">📅 {book['year']}</p>
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
@@ -572,7 +574,7 @@ elif nav == "🗣️ Practice Chat":
     st.subheader("💬 Patron Roleplay")
     col_set, col_play = st.columns([1, 2])
     with col_set:
-        st.write("Click to generate a scenario (Auto-Voice: Female AU)")
+        st.write("Click to generate a scenario:")
         if st.button("🎲 New Customer", type="primary", use_container_width=True):
             book = random.choice(st.session_state.top_books_db)
             templates = [
